@@ -43,9 +43,15 @@ module.exports = {
     }
   },
 
-  devtool: "eval-source-map",
+  devtool: 'eval-source-map',
   devServer: {
-    watchFiles: ["./src/template.html", "./src/login.html"],
+    static: {
+      directory: path.join(__dirname, 'dist'), // Serve files from the 'dist' folder
+    },
+    open: true, // Automatically open the browser
+    port: 3001, // You can change the port number
+    hot: true, // Enable hot module replacement
+    watchFiles: ["./src/**/*.html"], // Watch for changes in HTML files
   },
   
   plugins: [
