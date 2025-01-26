@@ -101,38 +101,39 @@ app.get("/api/stats/:userId", (req, res) => {
     });
 });
 
-app.post("/api/attend-class", (req, res) => {
-    const { userId } = req.body;
-    const token = req.headers["authorization"]?.split(" ")[1];
+app.get("/api/stats", (req, res) => {
+    // Get the token from the Authorization header
+    const token = req.headers["authorization"]?.split(" ")[1]; // "Bearer <token>"
+    
     if (!token) {
-        return res.status(403).send("Access denied.");
+        return res.status(403).send("Access denied. No token provided.");
     }
 
+    // Verify the token
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-            return res.status(401).send("Invalid token.");
+            return res.status(401).send("Invalid or expired token.");
         }
 
-        if (decoded.userId !== parseInt(userId)) {
-            return res.status(403).send("Access denied.");
-        }
+        // Extract userId from decoded JWT token
+        const userId = decoded.userId;
 
+        // Query to fetch stats for the user, excluding the user_id column
         db.query(
-            `UPDATE Stats
-            SET patterns = patterns + 1,
-                technique = technique + 1,
-                strength = strength + 1,
-                agility = agility + 1,
-                flexibility = flexibility + 1,
-                combat = combat + 1
-            WHERE user_id = ?`,
+            "SELECT patterns, technique, strength, agility, flexibility, combat FROM stats WHERE user_id = ?",
             [userId],
             (err, results) => {
                 if (err) {
-                    res.status(500).send(err);
-                    return;
+                    return res.status(500).send("Database error: " + err);
                 }
-                res.send("Stats updated successfully!");
+
+                if (results.length === 0) {
+                    return res.status(404).send("No stats found for this user.");
+                }
+
+                // Return the stats data excluding user_id
+                const stats = results[0]; // Assuming we expect only one row for each user_id
+                res.json(stats); // Send the stats data as JSON
             }
         );
     });
