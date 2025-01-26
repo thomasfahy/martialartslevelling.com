@@ -5,7 +5,7 @@ const { node } = require('webpack');
 const webpack = require('webpack');
 
 module.exports = {
-  target: 'node',
+  target: 'web',
   mode: "development",
   entry: "./src/index.js",
   output: {
@@ -24,7 +24,8 @@ module.exports = {
       async_hooks: false,
       "crypto": require.resolve("crypto-browserify"),
       "net": false, // `net` module is not needed in the browser; you can set it to false
-      "tls": false, // `tls` module is not needed in the browser; you can set it to false
+      "tls": false,
+      "os": false,
       "buffer": require.resolve("buffer/"),
       "process": require.resolve("process/browser"),
       "stream": require.resolve("stream-browserify"),
@@ -34,7 +35,8 @@ module.exports = {
       "path": require.resolve("path-browserify"),
       "util": require.resolve("util/"),
       "querystring": require.resolve("querystring-es3"),
-      "http": require.resolve("stream-http")
+      "http": require.resolve("stream-http"),
+      "vm": require.resolve("vm-browserify")
     }
   },
 
@@ -45,6 +47,10 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/template.html",
+    }),
+    new HtmlWebpackPlugin({
+      template: "./src/login.html",
+      filename: 'login.html',
     }),
     new webpack.IgnorePlugin({
       resourceRegExp: /express\/lib\/view\.js/,

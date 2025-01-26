@@ -1,14 +1,16 @@
 const express = require("express");
 const mysql = require("mysql2");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-require('dotenv').config();
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
+console.log("THIS IS WORKING");
 
 // Connect to MySQL
 const db = mysql.createConnection({
@@ -26,121 +28,132 @@ db.connect((err) => {
     console.log("Connected to database.");
 });
 
-// JWT secret key (should be stored securely, not hardcoded in production)
-const JWT_SECRET = "your_jwt_secret_key";
-
-// API Endpoint: User Registration
-app.post("/api/register", (req, res) => {
-    const { username, password } = req.body;
-
-    // Hash the password
-    bcrypt.hash(password, 10, (err, hashedPassword) => {
-        if (err) {
-            res.status(500).send("Error hashing password");
-            return;
-        }
-
-        // Store user in database
-        const query = "INSERT INTO Users (username, password) VALUES (?, ?)";
-        db.query(query, [username, hashedPassword], (err, results) => {
-            if (err) {
-                res.status(500).send("Error registering user");
-                return;
-            }
-            res.status(200).send("User registered successfully");
-        });
-    });
-});
-
-// API Endpoint: User Login
+// API Endpoint: Login
 app.post("/api/login", (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    // Check if user exists
-    const query = "SELECT * FROM Users WHERE username = ?";
-    db.query(query, [username], (err, results) => {
+    // Check if email is provided
+    if (!email || !password) {
+        return res.status(400).send("Email and password are required.");
+    }
+
+    // Query the database for the user by email
+    db.query("SELECT * FROM users WHERE email = ?", [email], (err, results) => {
         if (err) {
-            res.status(500).send("Error checking user");
-            return;
+            return res.status(500).send("Database error.");
         }
 
         if (results.length === 0) {
-            return res.status(401).send("User not found");
+            return res.status(400).send("User not found.");
         }
 
-        // Compare provided password with hashed password in database
         const user = results[0];
+
+        // Compare the password with the stored hash
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) {
-                res.status(500).send("Error comparing passwords");
-                return;
+                return res.status(500).send("Error comparing password.");
             }
 
             if (!isMatch) {
-                return res.status(401).send("Invalid credentials");
+                return res.status(400).send("Invalid password.");
             }
 
-            // Generate JWT token
-            const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
-            res.status(200).json({ token });
+            // If the password matches, create a JWT
+            const token = jwt.sign(
+                { userId: user.id, email: user.email },
+                process.env.JWT_SECRET, // Use the secret from the .env file
+                { expiresIn: '1h' } // Set expiration time for the token
+            );
+
+            // Send the JWT to the client
+            res.json({ token });
         });
     });
 });
 
-// Middleware to check if user is authenticated using JWT
-const authenticateJWT = (req, res, next) => {
-    const token = req.header("Authorization")?.split(" ")[1]; // Get token from Authorization header
+// API Endpoint: Fetch user stats (Authenticated)
+app.get("/api/stats/:userId", (req, res) => {
+    const { userId } = req.params;
+
+    // Verify JWT from the Authorization header
+    const token = req.headers["authorization"]?.split(" ")[1]; // Expecting "Bearer token"
     if (!token) {
-        return res.status(403).send("Access denied. No token provided.");
+        return res.status(403).send("Access denied.");
     }
 
-    jwt.verify(token, JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
-            return res.status(403).send("Invalid or expired token");
+            return res.status(401).send("Invalid token.");
         }
-        req.user = user; // Add user info to request object
-        next();
-    });
-};
 
-// API Endpoint: Fetch user stats (requires authentication)
-app.get("/api/stats", authenticateJWT, (req, res) => {
-    const { userId } = req.user;
-
-    db.query("SELECT * FROM Stats WHERE user_id = ?", [userId], (err, results) => {
-        if (err) {
-            return res.status(500).send("Error fetching stats");
+        // Ensure that the token's userId matches the requested userId
+        if (decoded.userId !== parseInt(userId)) {
+            return res.status(403).send("Access denied.");
         }
-        res.json(results[0]);
+
+        // Proceed to get the user stats
+        db.query(
+            "SELECT * FROM Stats WHERE user_id = ?",
+            [userId],
+            (err, results) => {
+                if (err) {
+                    res.status(500).send(err);
+                    return;
+                }
+                res.json(results[0]);
+            }
+        );
     });
 });
 
-// API Endpoint: Update stats after attending class (requires authentication)
-app.post("/api/attend-class", authenticateJWT, (req, res) => {
-    const { userId } = req.user; // Get userId from the JWT payload
+// API Endpoint: Update stats after attending class (Authenticated)
+app.post("/api/attend-class", (req, res) => {
+    const { userId } = req.body;
 
-    db.query(
-        `UPDATE Stats
-         SET patterns = patterns + 1,
-             technique = technique + 1,
-             strength = strength + 1,
-             agility = agility + 1,
-             flexibility = flexibility + 1,
-             combat = combat + 1
-         WHERE user_id = ?`,
-        [userId],
-        (err, results) => {
-            if (err) {
-                return res.status(500).send("Error updating stats");
-            }
-            res.send("Stats updated successfully!");
+    // Verify JWT from the Authorization header
+    const token = req.headers["authorization"]?.split(" ")[1];
+    if (!token) {
+        return res.status(403).send("Access denied.");
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).send("Invalid token.");
         }
-    );
+
+        // Ensure that the token's userId matches the requested userId
+        if (decoded.userId !== parseInt(userId)) {
+            return res.status(403).send("Access denied.");
+        }
+
+        // Update stats
+        db.query(
+            `UPDATE Stats
+            SET patterns = patterns + 1,
+                technique = technique + 1,
+                strength = strength + 1,
+                agility = agility + 1,
+                flexibility = flexibility + 1,
+                combat = combat + 1
+            WHERE user_id = ?`,
+            [userId],
+            (err, results) => {
+                if (err) {
+                    res.status(500).send(err);
+                    return;
+                }
+                res.send("Stats updated successfully!");
+            }
+        );
+    });
 });
 
 // Start server
 app.listen(3000, () => {
     console.log("Server running on http://localhost:3000");
 });
+
+console.log("YEAH YEAH")
 
 module.exports = app;
