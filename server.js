@@ -32,7 +32,7 @@ db.connect((err) => {
 app.post("/api/login", (req, res) => {
     const { email, password } = req.body;
 
-    // Check if email is provided
+    // Check if email and password are provided
     if (!email || !password) {
         return res.status(400).send("Email and password are required.");
     }
@@ -40,33 +40,38 @@ app.post("/api/login", (req, res) => {
     // Query the database for the user by email
     db.query("SELECT * FROM users WHERE email = ?", [email], (err, results) => {
         if (err) {
-            return res.status(500).send("Database error.");
+            console.error("Database error:", err);
+            return res.status(500).send("Internal server error.");
         }
 
         if (results.length === 0) {
-            return res.status(400).send("User not found.");
+            // No user found with the given email
+            return res.status(400).send("Invalid email or password.");
         }
 
         const user = results[0];
+        console.log(user);
 
-        // Compare the password with the stored hash
+        // Compare the provided password with the stored hashed password
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) {
-                return res.status(500).send("Error comparing password.");
+                console.error("Error comparing passwords:", err);
+                return res.status(500).send("Internal server error.");
             }
 
             if (!isMatch) {
-                return res.status(400).send("Invalid password.");
+                // Password does not match
+                return res.status(400).send("Invalid email or password.");
             }
 
-            // If the password matches, create a JWT
+            // If email and password are correct, generate a JWT
             const token = jwt.sign(
-                { userId: user.id, email: user.email },
-                process.env.JWT_SECRET, // Use the secret from the .env file
-                { expiresIn: '1h' } // Set expiration time for the token
+                { userId: user.user_id, email: user.email },
+                process.env.JWT_SECRET,
+                { expiresIn: "1h" }
             );
 
-            // Send the JWT to the client
+            // Send the token as a response
             res.json({ token });
         });
     });

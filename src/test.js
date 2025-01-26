@@ -1,1 +1,0 @@
-export const test = "This is working as expected!";
