@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../src/styles/signup.css">
+    <title>Sign Up - Martial Arts Levelling</title>
+</head>
+<body>
+    <div class="container">
+        <!-- Main Heading -->
+        <div class="main-heading">
+          <h1>Sign Up</h1>
+          <p>Create your account to start leveling up!</p>
+        </div>
+    
+        <!-- Signup Form -->
+        <form id="signupForm">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+            <div class="error" id="passwordError">Passwords do not match.</div>
+          </div>
+          <button type="submit" class="submit-button" id="submitButton" disabled>Sign Up</button>
+        </form>
+    
+        <!-- Login Link -->
+        <div class="login-link">
+          <p>Already have an account? <a href="/login.html">Log in here</a>.</p>
+        </div>
+      </div>
+    
+      <script>
+        import "../styles/signup.css";
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+        const passwordError = document.getElementById("passwordError");
+        const submitButton = document.getElementById("submitButton");
+    
+        function validatePasswords() {
+          if (passwordInput.value !== confirmPasswordInput.value) {
+            passwordError.classList.add("visible");
+            submitButton.disabled = true;
+          } else {
+            passwordError.classList.remove("visible");
+            submitButton.disabled = false;
+          }
+        }
+    
+        passwordInput.addEventListener("input", validatePasswords);
+        confirmPasswordInput.addEventListener("input", validatePasswords);
+    
+        // Form Submission
+        document.getElementById("signupForm").addEventListener("submit", async (event) => {
+          event.preventDefault();
+    
+          const formData = {
+            username: document.getElementById("username").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+          };
+    
+          try {
+            const response = await fetch("/api/signup", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            });
+    
+            if (response.ok) {
+              alert("Signup successful! Redirecting to login...");
+              window.location.href = "/login.html";
+            } else {
+              const errorData = await response.json();
+              alert(`Signup failed: ${errorData.message}`);
+            }
+          } catch (error) {
+            console.error("Error during signup:", error);
+            alert("An error occurred. Please try again.");
+          }
+        });
+      </script>
+</body>
+</html>

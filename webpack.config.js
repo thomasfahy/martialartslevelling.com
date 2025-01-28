@@ -67,6 +67,11 @@ module.exports = {
       filename: 'login.html',
       chunks: ["login"],
     }),
+    new HtmlWebpackPlugin({
+      template: "./src/signup.html",
+      filename: 'signup.html',
+      chunks: ["login"],
+    }),
     new webpack.IgnorePlugin({
       resourceRegExp: /express\/lib\/view\.js/,
     }),
