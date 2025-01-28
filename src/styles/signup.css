@@ -16,11 +16,11 @@ body {
 }
 
 /* Login container */
-.login-container {
-    background-color: #fff;
+.container {
+    background-color: #ff0000;
     padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(250, 0, 0, 0.1);
     max-width: 400px;
     width: 100%;
     text-align: center;
