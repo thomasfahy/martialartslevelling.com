@@ -72,6 +72,7 @@ module.exports = {
       template: "./src/signup.html",
       filename: 'signup.html',
       chunks: ["signup"],
+      inject: true,
     }),
     new webpack.IgnorePlugin({
       resourceRegExp: /express\/lib\/view\.js/,

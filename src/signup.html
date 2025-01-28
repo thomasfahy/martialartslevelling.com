@@ -3,43 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../src/styles/signup.css">
     <title>Sign Up - Martial Arts Levelling</title>
 </head>
 <body>
-    <div class="container">
-        <!-- Main Heading -->
-        <div class="main-heading">
-          <h1>Sign Up</h1>
-          <p>Create your account to start leveling up!</p>
-        </div>
-        <!-- Signup Form -->
-        <form id="signupForm">
+    <div class="form-container">
+        <h2>Create Account</h2>
+        <form action="#" method="POST">
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="suusername" name="username" required>
+            <input type="text" id="username" name="username" required>
           </div>
+    
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="suemail" name="email" required>
+            <input type="email" id="email" name="email" required>
           </div>
+    
           <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
           </div>
-          <div class="form-group">
-            <label for="confirmPassword">Confirm Password</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" required>
-            <div class="error" id="passwordError">Passwords do not match.</div>
-          </div>
-          <button type="submit" class="submit-button" id="submitButton" disabled>Sign Up</button>
-        </form>
     
-        <!-- Login Link -->
-        <div class="login-link">
-          <p>Already have an account? <a href="/login.html">Log in here</a>.</p>
-        </div>
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
+          </div>
+    
+          <button type="submit">Sign Up</button>
+    
+          <div class="text-center">
+            <p>Already have an account? <a href="#">Login here</a></p>
+          </div>
+        </form>
       </div>
-    <script src="../src/javascript/signup.js"></script>
 </body>
 </html>
