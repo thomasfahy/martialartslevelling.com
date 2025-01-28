@@ -30,6 +30,6 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
         }
     } catch (error) {
         console.error('Error:', error);
-        document.getElementById('error-message').textContent = 'An error occurred. Please try again later.';
+        document.getElementById('error-message').textContent = 'Invalid username or password';
     }
 });
