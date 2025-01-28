@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 
-const password = "Minitom4!!";
+const password = "password123";
 bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) {
         console.error('Error hashing password:', err);

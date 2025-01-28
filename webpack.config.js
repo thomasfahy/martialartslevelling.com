@@ -8,7 +8,8 @@ module.exports = {
   mode: "development",
   entry: {
     index: "./src/javascript/index.js",
-    login: "./src/javascript/login.js"
+    login: "./src/javascript/login.js",
+    signup: "./src/javascript/signup.js"
   },
 
   output: {

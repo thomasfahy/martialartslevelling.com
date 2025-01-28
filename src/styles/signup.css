@@ -3,11 +3,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    background-color: #005eff;
 }
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f7fc;
+    background-color: #005eff;
     display: flex;
     justify-content: center;
     align-items: center;
