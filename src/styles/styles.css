@@ -102,3 +102,21 @@ body {
   .plus-button:hover {
     background-color: #45a049;
   }
+
+
+  .logout-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .logout-button:hover {
+    background-color: #ff1a1a;
+  }

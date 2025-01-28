@@ -78,12 +78,12 @@ app.post("/api/login", (req, res) => {
 
 // Stats route (GET stats using token)
 app.get("/api/stats", (req, res) => {
+  console.log("trying to get STATS")
   const token = req.headers["authorization"]?.split(" ")[1]; // Extract token from "Authorization" header
-
+  console.log(token);
   if (!token) {
     return res.status(403).send("Access denied. No token provided.");
   }
-
   // Verify token
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
@@ -91,12 +91,12 @@ app.get("/api/stats", (req, res) => {
     }
 
     const user_id = decoded.user_id;
-
     // Query stats for the authenticated user
     db.query(
       "SELECT patterns, technique, strength, agility, flexibility, combat FROM stats WHERE user_id = ?",
       [user_id],
       (err, results) => {
+        console.log(results);
         if (err) {
           console.error("Database error:", err);
           return res.status(500).send("Database error.");

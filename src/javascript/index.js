@@ -9,8 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
       });
-
-  fetch(`/api/stats`, {
+  const token = localStorage.getItem("jwtToken");
+  console.log("Token being sent:", token);    
+  fetch(`http://localhost:3000/api/stats`, {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${token}`, // Send token in header
@@ -46,3 +47,8 @@ function updateStats(stats) {
     }
   });
 }
+
+document.getElementById("logoutButton").addEventListener("click", () => {
+  localStorage.removeItem("token");
+  window.location.href = "/login.html"; // Replace with your login page URL
+});
