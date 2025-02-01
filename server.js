@@ -8,22 +8,23 @@ require("dotenv").config();
 
 const app = express();
 
-// Enable CORS
 app.use(
   cors({
-    origin: "http://localhost:3001", // Replace with the URL of your frontend
+    origin: "http://localhost:3001",
     methods: ["GET", "POST"],
   })
 );
-app.use(bodyParser.json()); // Parse JSON request bodies
+app.use(bodyParser.json());
 
-// Database connection
+
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "Minitom4!!",
   database: "martial_arts_db",
 });
+
+
 
 db.connect((err) => {
   if (err) {
@@ -33,7 +34,8 @@ db.connect((err) => {
   console.log("Connected to database.");
 });
 
-// Login route
+
+
 app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -46,14 +48,12 @@ app.post("/api/login", (req, res) => {
       console.error("Database error:", err);
       return res.status(500).send("Internal server error.");
     }
-
     if (results.length === 0) {
       return res.status(400).send("Invalid email or password.");
     }
-
     const user = results[0];
 
-    // Compare hashed passwords
+
     bcrypt.compare(password, user.password, (err, isMatch) => {
       if (err) {
         console.error("Error comparing passwords:", err);
@@ -63,8 +63,6 @@ app.post("/api/login", (req, res) => {
       if (!isMatch) {
         return res.status(400).send("Invalid email or password.");
       }
-
-      // Generate JWT token
       const token = jwt.sign(
         { user_id: user.user_id, email: user.email },
         process.env.JWT_SECRET,
@@ -76,7 +74,48 @@ app.post("/api/login", (req, res) => {
   });
 });
 
-// Stats route (GET stats using token)
+
+
+app.post("/api/signup", async (req, res) => {
+  const { firstName, lastName, username, email, password, confirmPassword } = req.body;
+  if (!firstName || !lastName || !username || !email || !password || !confirmPassword) {
+    return res.status(400).send("All fields are required.");
+  }
+
+  if (password !== confirmPassword) {
+    return res.status(400).send("Passwords do not match.");
+  }
+  db.query(
+    "SELECT * FROM users WHERE email = ? OR username = ?",
+    [email, username],
+    async (err, results) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).send("Internal server error.");
+      }
+      if (results.length > 0) {
+        return res.status(400).send("Email or username already exists.");
+      }
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      db.query(
+        "INSERT INTO users (first_name, last_name, username, email, password) VALUES (?, ?, ?, ?, ?)",
+        [firstName, lastName, username, email, hashedPassword],
+        (err, results) => {
+          if (err) {
+            console.error("Database error:", err);
+            return res.status(500).send("Internal server error.");
+          }
+          res.status(201).send("User registered successfully.");
+        }
+      );
+    }
+  );
+});
+
+
+
+
 app.get("/api/stats", (req, res) => {
   console.log("trying to get STATS")
   const token = req.headers["authorization"]?.split(" ")[1]; // Extract token from "Authorization" header
