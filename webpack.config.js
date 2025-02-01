@@ -9,7 +9,8 @@ module.exports = {
   entry: {
     index: "./src/javascript/index.js",
     login: "./src/javascript/login.js",
-    signup: "./src/javascript/signup.js"
+    signup: "./src/javascript/signup.js",
+    startingStats: "./src/javascript/starting-stats.js"
   },
 
   output: {
@@ -47,12 +48,12 @@ module.exports = {
   devtool: 'eval-source-map',
   devServer: {
     static: {
-      directory: path.join(__dirname, 'dist'), // Serve files from the 'dist' folder
+      directory: path.join(__dirname, 'dist'),
     },
-    open: true, // Automatically open the browser
-    port: 3001, // You can change the port number
-    hot: true, // Enable hot module replacement
-    watchFiles: ["./src/**/*.html"], // Watch for changes in HTML files
+    open: true,
+    port: 3001,
+    hot: true,
+    watchFiles: ["./src/**/*.html"],
   },
   
   plugins: [
@@ -67,6 +68,11 @@ module.exports = {
       template: "./src/login.html",
       filename: 'login.html',
       chunks: ["login"],
+    }),
+    new HtmlWebpackPlugin({
+      template: "./src/starting-stats.html",
+      filename: 'starting-stats.html',
+      chunks: ["startingStats"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/signup.html",

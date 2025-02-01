@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starting Stats - Martial Arts Levelling</title>
+</head>
+<body>
+  <div class="stats-container">
+    <h2>Ready to start leveling up?</h2>
+    <p>Please answer some questions so we know who we're dealing with. Answer honestly, Don't overthink it—just go with your gut!</p>
+    <form id="stats-form">
+      <div class="stats-group">
+        <label for="strength">How strong are you?</label>
+        <input type="range" id="confidence" name="confidence" min="1" max="10" value="5">
+      </div>
+      <div class="stats-group">
+        <label for="fitness">How would you rate your current fitness?</label>
+        <input type="range" id="fitness" name="fitness" min="1" max="10" value="5">
+      </div>
+      <div class="stats-group">
+        <label for="discipline">Whats your flexibility like?</label>
+        <input type="range" id="discipline" name="discipline" min="1" max="10" value="5">
+      </div>
+      <div class="stats-group">
+        <label for="discipline">Much experience fighting?</label>
+        <input type="range" id="discipline" name="discipline" min="1" max="10" value="5">
+      </div>
+
+      <div class="stats-group">
+        <label for="experience">How long have you been practising martial arts?</label>
+        <select id="experience" name="experience">
+          <option value="1">I want to start</option>
+          <option value="1">Just started</option>
+          <option value="1">Less than 1 year</option>
+          <option value="3">1-3 years</option>
+          <option value="5">3-5 years</option>
+          <option value="7">5-10 years</option>
+          <option value="10">More than 10 years</option>
+        </select>
+      </div>
+      <div class="stats-group">
+        <label for="belt">What is your current belt level?</label>
+        <select id="belt" name="belt">
+            <option value="1">Unranked</option>
+            <option value="1">White Belt - 10th GUP</option>
+            <option value="2">Yellow Belt - 9th GUP</option>
+            <option value="3">Orange Belt - 8th GUP</option>
+            <option value="4">Green Belt - 7th GUP</option>
+            <option value="5">Blue Belt - 6th GUP</option>
+            <option value="6">Brown Belt - 5th GUP</option>
+            <option value="7">Senior Brown Belt - 4th GUP</option>
+            <option value="8">Red Belt - 3rd GUP</option>
+            <option value="9">Senior Red Belt - 2nd GUP</option>
+            <option value="10">Poom Belt - 1st GUP</option>
+            <option value="11">Black Belt* - 1st DAN</option>
+        </select>
+      </div>
+
+      <button type="submit">Calculate My Stats</button>
+      <p>*Inital stats have no effect on your starting level</p>
+    </form>
+  </div>
