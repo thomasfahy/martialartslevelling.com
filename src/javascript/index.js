@@ -49,6 +49,6 @@ function updateStats(stats) {
 }
 
 document.getElementById("logoutButton").addEventListener("click", () => {
-  localStorage.removeItem("token");
+  localStorage.removeItem("jwtToken");
   window.location.href = "/login.html"; // Replace with your login page URL
 });

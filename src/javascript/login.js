@@ -1,5 +1,6 @@
 import "../styles/loginpage.css";
-
+const token = localStorage.getItem("jwtToken");
+console.log("Token being sent:", token);
 
 document.getElementById('login-form').addEventListener('submit', async (event) => {
     event.preventDefault();

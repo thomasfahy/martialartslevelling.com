@@ -12,6 +12,7 @@ document.querySelector("form").addEventListener("submit", async (event) => {
     };
 
     try {
+
       const response = await fetch("http://localhost:3000/api/signup", {
         method: "POST",
         headers: {
@@ -20,9 +21,12 @@ document.querySelector("form").addEventListener("submit", async (event) => {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         alert("User registered successfully!");
-        window.location.href = "./login.html";
+        localStorage.setItem('jwtToken', data.token);
+        window.location.href = "./starting-stats.html";
       } else {
         const errorMessage = await response.text();
         alert(errorMessage);

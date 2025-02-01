@@ -10,22 +10,23 @@
     <h2>Ready to start leveling up?</h2>
     <p>Please answer some questions so we know who we're dealing with. Answer honestly, Don't overthink it—just go with your gut!</p>
     <form id="stats-form">
-      <div class="stats-group">
+    <div class="stats-group">
         <label for="strength">How strong are you?</label>
-        <input type="range" id="confidence" name="confidence" min="1" max="10" value="5">
-      </div>
-      <div class="stats-group">
+        <input type="range" id="strength" name="strength" min="0" max="10" value="5">
+        </div>
+        <div class="stats-group">
         <label for="fitness">How would you rate your current fitness?</label>
-        <input type="range" id="fitness" name="fitness" min="1" max="10" value="5">
-      </div>
-      <div class="stats-group">
-        <label for="discipline">Whats your flexibility like?</label>
-        <input type="range" id="discipline" name="discipline" min="1" max="10" value="5">
-      </div>
-      <div class="stats-group">
-        <label for="discipline">Much experience fighting?</label>
-        <input type="range" id="discipline" name="discipline" min="1" max="10" value="5">
-      </div>
+        <input type="range" id="fitness" name="fitness" min="0" max="10" value="5">
+        </div>
+        <div class="stats-group">
+        <label for="flexibility">What's your flexibility like?</label>
+        <input type="range" id="flexibility" name="flexibility" min="0" max="10" value="5">
+        </div>
+        <div class="stats-group">
+        <label for="combat">How much experience do you have fighting?</label>
+        <input type="range" id="combat" name="combat" min="0" max="10" value="5">
+    </div>
+        
 
       <div class="stats-group">
         <label for="experience">How long have you been practising martial arts?</label>
@@ -57,7 +58,8 @@
         </select>
       </div>
 
-      <button type="submit">Calculate My Stats</button>
+      <button type="submit" id="starting-stats-submit">Calculate My Stats</button>
       <p>*Inital stats have no effect on your starting level</p>
     </form>
   </div>
+</body>
