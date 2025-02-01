@@ -37,6 +37,19 @@ body {
     box-sizing: border-box;
     background-color: #f9f9f9;
   }
+
+  div.form-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  div.password-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
   input:focus {
     border-color: #007BFF;
     outline: none;
