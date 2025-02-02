@@ -61,7 +61,7 @@ module.exports = {
       filename: '[name].css',
     }),
     new HtmlWebpackPlugin({
-      template: "./src/template.html",
+      template: "./src/dashboard.html",
       chunks: ["index"],
     }),
     new HtmlWebpackPlugin({

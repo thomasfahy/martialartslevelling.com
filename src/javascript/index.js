@@ -52,3 +52,17 @@ document.getElementById("logoutButton").addEventListener("click", () => {
   localStorage.removeItem("jwtToken");
   window.location.href = "/login.html"; // Replace with your login page URL
 });
+
+
+//XP BAR SCRIPT
+
+let level = 3;
+let currentXP = 300;
+let xpToNextLevel = 300;
+
+document.getElementById("level").textContent = level;
+let xpFill = document.getElementById("xpFill");
+
+let progress = (currentXP / xpToNextLevel) * 100;
+xpFill.style.width = progress + "%";
+xpFill.textContent = currentXP + " / " + xpToNextLevel + " XP";

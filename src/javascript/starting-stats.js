@@ -33,10 +33,13 @@ console.log("Token being sent:", token);
         .then(data => {
             console.log('Success:', data);
             alert('Stats saved successfully!');
-            window.location.href = "/index.html";
+            window.location.href="./index.html";
         })
+
         .catch((error) => {
             console.error('Error:', error);
             alert('Error saving stats.' + error);
+
         });
+
       });

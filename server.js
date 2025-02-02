@@ -134,7 +134,7 @@ app.post("/api/signup", async (req, res) => {
               process.env.JWT_SECRET,
               { expiresIn: "1h" }
             );
-            
+
             console.log("Generated token:", token);
             res.json({ token });
 
@@ -150,8 +150,8 @@ app.post("/api/signup", async (req, res) => {
 
 
 app.post("/api/signup-stats", (req, res) => {
-  const token = req.headers["authorization"]?.split(" ")[1]; // Get token from authorization header
-  
+  const token = req.headers["authorization"]?.split(" ")[1];
+
   if (!token) {
     return res.status(403).json({ message: "Access denied. No token provided." });
   }
@@ -164,7 +164,6 @@ app.post("/api/signup-stats", (req, res) => {
     const user_id = decoded.user_id;
     const { strength, agility, flexibility, combat, technique, patterns } = req.body;
 
-    // Validate stats data
     if (
       typeof strength !== "number" ||
       typeof agility !== "number" ||
@@ -183,7 +182,6 @@ app.post("/api/signup-stats", (req, res) => {
       }
 
       if (results.length > 0) {
-        // Update existing stats
         db.query(
           "UPDATE stats SET strength = ?, agility = ?, flexibility = ?, combat = ?, technique = ?, patterns = ? WHERE user_id = ?",
           [strength, agility, flexibility, combat, technique, patterns, user_id],
@@ -196,7 +194,6 @@ app.post("/api/signup-stats", (req, res) => {
           }
         );
       } else {
-        // Insert new stats
         db.query(
           "INSERT INTO stats (user_id, strength, agility, flexibility, combat, technique, patterns) VALUES (?, ?, ?, ?, ?, ?, ?)",
           [user_id, strength, agility, flexibility, combat, technique, patterns],
@@ -212,7 +209,6 @@ app.post("/api/signup-stats", (req, res) => {
     });
   });
 });
-
 
 
 app.get("/api/stats", (req, res) => {
