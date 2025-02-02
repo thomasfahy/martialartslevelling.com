@@ -10,13 +10,13 @@ body {
   color: #e0e0e0;
 }
 
-.container {
-  max-width: 600px;
+.stats-container {
+  width: 23vw;
   margin: 0 auto;
   padding: 20px;
   background: linear-gradient(145deg, #1a1a2e, #16213e);
   border-radius: 10px;
-  border: 2px solid #00a8ff;
+  border: 2px solid #00aaff;
   box-shadow: 0 0 20px rgba(0, 168, 255, 0.5);
   animation: fadeIn 0.5s ease-in-out;
 }
@@ -28,15 +28,15 @@ body {
 
 .main-heading h1 {
   font-size: 2.5rem;
-  color: #00a8ff; /* Bright blue for the title */
+  color: #00a8ff;
   margin: 0;
   font-weight: bold;
-  text-shadow: 0 0 10px rgba(0, 168, 255, 0.7); /* Glowing text effect */
+  text-shadow: 0 0 10px rgba(0, 168, 255, 0.7);
 }
 
 .main-heading p {
   font-size: 1.2rem;
-  color: #e0e0e0; /* Light text color */
+  color: #e0e0e0;
   margin: 10px 0 0;
 }
 
@@ -48,12 +48,12 @@ body {
 .level-bar h2 {
   font-size: 1.5rem;
   margin-bottom: 10px;
-  color: #e0e0e0; /* Light text color */
+  color: #e0e0e0;
 }
 
 .progress-container {
   position: relative;
-  background: #1a1a2e; /* Dark input background */
+  background: #1a1a2e;
   border-radius: 10px;
   height: 25px;
   overflow: hidden;
@@ -62,8 +62,8 @@ body {
 
 .progress-bar {
   height: 100%;
-  width: 20%; /* Progress percentage (default 20%) */
-  background: linear-gradient(145deg, #00a8ff, #0077b6); /* Gradient blue */
+  width: 20%;
+  background: linear-gradient(145deg, #00a8ff, #0077b6);
   transition: width 0.5s ease-in-out;
 }
 
@@ -89,7 +89,7 @@ body {
 .stats li {
   font-size: 1.2rem;
   padding: 10px;
-  background: #1a1a2e; /* Dark metallic background */
+  background: #1a1a2e;
   border-radius: 5px;
   color: #e0e0e0;
   display: flex;
@@ -108,51 +108,45 @@ body {
   flex: 1;
 }
 
-.stat-image {
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
-}
-
 .stat-value {
   margin-right: 1rem;
   font-weight: bold;
 }
 
 .plus-button {
-  background-color: #00a8ff; /* Bright blue for buttons */
+  background-color: #00a8ff;
   border: none;
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
-  box-shadow: 0 0 10px rgba(0, 168, 255, 0.3); /* Glow effect */
+  box-shadow: 0 0 10px rgba(0, 168, 255, 0.3);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .plus-button:hover {
-  background-color: #0077b6; /* Slightly darker blue */
-  box-shadow: 0 0 15px rgba(0, 168, 255, 0.6); /* Stronger glow effect */
+  background-color: #0077b6;
+  box-shadow: 0 0 15px rgba(0, 168, 255, 0.6);
 }
 
 .logout-button {
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #e74c3c; /* Red for logout button */
+  background-color: #e74c3c;
   color: #fff;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  box-shadow: 0 0 10px rgba(231, 76, 60, 0.5); /* Glow effect */
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
 }
 
 .logout-button:hover {
-  background-color: #c0392b; /* Darker red on hover */
-  box-shadow: 0 0 15px rgba(231, 76, 60, 0.7); /* Stronger glow effect */
+  background-color: #c0392b;
+  box-shadow: 0 0 15px rgba(231, 76, 60, 0.7);
 }
 
 #level-text {
@@ -164,7 +158,7 @@ body {
   max-width: 800px;
   margin: auto;
   padding: 20px;
-  background: #1a1a2e; /* Dark metallic background */
+  background: #1a1a2e;
   border-radius: 10px;
 }
 
@@ -181,7 +175,7 @@ body {
 .xp-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(145deg, #00a8ff, #0077b6); /* Gradient blue for XP bar */
+  background: linear-gradient(145deg, #00a8ff, #0077b6);
   text-align: center;
   line-height: 30px;
   font-weight: bold;
@@ -207,36 +201,36 @@ button {
 }
 
 #attend-class {
-  background: linear-gradient(145deg, #00a8ff, #0077b6); /* Gradient blue */
+  background: linear-gradient(145deg, #00a8ff, #0077b6);
   color: #fff;
   box-shadow: 0 0 10px rgba(0, 168, 255, 0.5);
   border-color: #00a8ff;
 }
 
 #attend-class:hover {
-  background: linear-gradient(145deg, #0077b6, #00a8ff); /* Reverse gradient on hover */
-  box-shadow: 0 0 15px rgba(0, 168, 255, 0.7); /* Glow effect */
+  background: linear-gradient(145deg, #0077b6, #00a8ff);
+  box-shadow: 0 0 15px rgba(0, 168, 255, 0.7);
 }
 
 #attend-class:active {
-  background: linear-gradient(145deg, #006a91, #0080c7); /* Darker gradient on active */
+  background: linear-gradient(145deg, #006a91, #0080c7);
   box-shadow: 0 0 5px rgba(0, 168, 255, 0.3);
 }
 
 #level-up {
-  background: linear-gradient(145deg, #f39c12, #e67e22); /* Gradient orange-yellow */
+  background: linear-gradient(145deg, #f39c12, #e67e22);
   color: #fff;
   box-shadow: 0 0 10px rgba(241, 140, 28, 0.5);
   border-color: #f39c12;
 }
 
 #level-up:hover {
-  background: linear-gradient(145deg, #e67e22, #f39c12); /* Reverse gradient on hover */
-  box-shadow: 0 0 15px rgba(241, 140, 28, 0.7); /* Glow effect */
+  background: linear-gradient(145deg, #e67e22, #f39c12);
+  box-shadow: 0 0 15px rgba(241, 140, 28, 0.7);
 }
 
 #level-up:active {
-  background: linear-gradient(145deg, #d35400, #e67e22); /* Darker gradient on active */
+  background: linear-gradient(145deg, #d35400, #e67e22);
   box-shadow: 0 0 5px rgba(241, 140, 28, 0.3);
 }
 
@@ -246,15 +240,15 @@ button:hover {
 
 button:focus {
   outline: none;
-  box-shadow: 0 0 10px rgba(0, 168, 255, 0.6); /* Focus glow effect */
+  box-shadow: 0 0 10px rgba(0, 168, 255, 0.6);
 }
 
 .stat-increase-container {
+  display: flex;
   margin-top: 2rem;
   justify-self: center;
 }
 
-/* Fade-in animation */
 @keyframes fadeIn {
   from {
     opacity: 0;

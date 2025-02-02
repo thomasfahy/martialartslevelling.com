@@ -7,62 +7,60 @@
 </head>
 <body>
   <button class="logout-button" id="logoutButton">Logout</button>
-  <div class="main-heading">
-    <h1>The Martial Arts Leveling System</h1>
-    <p>Upgrade your stats, Level up and reach your true potential.</p>
-  </div>
-    <div class="container">
-    <div class="xp-container">
-      <h2 id="level-text">Level <span id="level">1</span></h2>
-      <div class="xp-bar">
-          <div class="xp-fill" id="xpFill">0 / 100 XP</div>
+  <div class="page-container">
+    <div class="center-container">
+      <div class="stats-container">
+        <div class="player-name">PLAYER NAME</div>
+        <div class="xp-container">
+          <h2 id="level-text">Level <span id="level">1</span></h2>
+          <div class="xp-bar">
+              <div class="xp-fill" id="xpFill">0 / 100 XP</div>
+          </div>
+        </div>
+        <ul class="stats">
+          <li>
+            <div class="stat-info">
+              <span class="stat-name">Patterns</span>
+              <span class="stat-value">0</span>
+            </div>
+          </li>
+          <li>
+            <div class="stat-info">
+              <span class="stat-name">Technique</span>
+              <span class="stat-value">0</span>
+            </div>
+          </li>
+          <li>
+            <div class="stat-info">
+              <span class="stat-name">Strength</span>
+              <span class="stat-value">0</span>
+            </div>
+          </li>
+          <li>
+            <div class="stat-info">
+              <span class="stat-name">Agility</span>
+              <span class="stat-value">0</span>
+            </div>
+          </li>
+          <li>
+            <div class="stat-info">
+              <span class="stat-name">Flexibility</span>
+              <span class="stat-value">0</span>
+            </div>
+          </li>
+          <li>
+            <div class="stat-info">
+              <span class="stat-name">Combat</span>
+              <span class="stat-value">0</span>
+            </div>
+          </li>
+        </ul>
+        <div class="stat-increase-container">
+          <button id="attend-class">Attend Class</button>
+          <button id="level-up">Level Up</button>
+        </div>
       </div>
     </div>
-    <ul class="stats">
-      <li>
-        <div class="stat-info">
-          <span class="stat-name">Patterns</span>
-          <span class="stat-value">0</span>
-        </div>
-      </li>
-      <li>
-        <div class="stat-info">
-          <span class="stat-name">Technique</span>
-          <span class="stat-value">0</span>
-        </div>
-      </li>
-      <li>
-        <div class="stat-info">
-          <img src="./assets/images/strength-icon.webp" alt="Strength" class="stat-image">
-          <span class="stat-name">Strength</span>
-          <span class="stat-value">0</span>
-        </div>
-      </li>
-      <li>
-        <div class="stat-info">
-          <img src="./assets/images/agility-icon.webp" alt="Strength" class="stat-image">
-          <span class="stat-name">Agility</span>
-          <span class="stat-value">0</span>
-        </div>
-      </li>
-      <li>
-        <div class="stat-info">
-          <img src="./assets/images/flexibility-icon.webp" alt="Strength" class="stat-image">
-          <span class="stat-name">Flexibility</span>
-          <span class="stat-value">0</span>
-        </div>
-      </li>
-      <li>
-        <div class="stat-info">
-          <span class="stat-name">Combat</span>
-          <span class="stat-value">0</span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div class="stat-increase-container">
-    <button id="attend-class">Attend Class</button>
-    <button id="level-up">Level Up</button>
   </div>
 </body>
 </html>

@@ -1,5 +1,7 @@
 import "../styles/styles.css";
 
+//GET STATS ON PAGE LOAD
+
 document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("DOMContentLoaded", () => {
         const token = localStorage.getItem("jwtToken");
@@ -14,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch(`http://localhost:3000/api/stats`, {
     method: "GET",
     headers: {
-      "Authorization": `Bearer ${token}`, // Send token in header
+      "Authorization": `Bearer ${token}`,
     },
 
   })
@@ -32,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+//UPDATE STATS ON PAGE LOAD
 
 function updateStats(stats) {
   const statElements = document.querySelectorAll(".stat-info");
@@ -50,11 +53,10 @@ function updateStats(stats) {
 
 document.getElementById("logoutButton").addEventListener("click", () => {
   localStorage.removeItem("jwtToken");
-  window.location.href = "/login.html"; // Replace with your login page URL
+  window.location.href = "/login.html"; 
 });
 
-
-//XP BAR SCRIPT
+// XP BAR SCRIPT
 
 let level = 3;
 let currentXP = 300;
