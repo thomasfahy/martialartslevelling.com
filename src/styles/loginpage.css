@@ -7,29 +7,33 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f7fc;
+    background-color: #0a0a1a; /* Dark blue background */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    color: #e0e0e0; /* Light text color */
 }
 
 /* Login container */
 .login-container {
-    background-color: #fff;
+    background: linear-gradient(145deg, #1a1a2e, #16213e); /* Metallic dark blue gradient */
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: 2px solid #00a8ff; /* Glowing border */
+    box-shadow: 0 0 20px rgba(0, 168, 255, 0.5); /* Glow effect */
     max-width: 400px;
     width: 100%;
     text-align: center;
+    animation: fadeIn 0.5s ease-in-out; /* Smooth fade-in animation */
 }
 
 /* Title styles */
 h2 {
-    color: #333;
+    color: #00a8ff; /* Bright blue for the title */
     font-size: 24px;
     margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(0, 168, 255, 0.7); /* Glowing text effect */
 }
 
 /* Input group styles */
@@ -40,7 +44,7 @@ h2 {
 
 .input-group label {
     font-size: 14px;
-    color: #666;
+    color: #e0e0e0; /* Light text color */
     display: block;
     margin-bottom: 5px;
 }
@@ -49,19 +53,22 @@ h2 {
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ddd;
+    background-color: #1a1a2e; /* Dark input background */
+    border: 1px solid #00a8ff; /* Glowing border */
     border-radius: 5px;
     outline: none;
-    transition: border-color 0.3s ease;
+    color: #e0e0e0; /* Light text color */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .input-group input:focus {
-    border-color: #4CAF50;
+    border-color: #00a8ff;
+    box-shadow: 0 0 10px rgba(0, 168, 255, 0.7); /* Glow effect on focus */
 }
 
 /* Button styles */
 .login-btn {
-    background-color: #4CAF50;
+    background: linear-gradient(145deg, #00a8ff, #0077b6); /* Gradient button */
     color: white;
     padding: 12px 20px;
     border: none;
@@ -69,18 +76,32 @@ h2 {
     font-size: 16px;
     width: 100%;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .login-btn:hover {
-    background-color: #45a049;
+    background: linear-gradient(145deg, #0077b6, #00a8ff); /* Gradient hover effect */
+    box-shadow: 0 0 10px rgba(0, 168, 255, 0.7); /* Glow effect on hover */
 }
 
 /* Error message styles */
 .error-message {
-    color: #ff4d4d;
+    color: #ff3434; /* Red error text */
     font-size: 14px;
     margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* Responsive design */

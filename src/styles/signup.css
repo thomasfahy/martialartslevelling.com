@@ -6,8 +6,6 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-image: url("../assets/images/signup-background.webp");
-    background-size: cover;
   }
   .form-container {
     background-color: #fff;

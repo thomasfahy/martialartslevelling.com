@@ -7,6 +7,8 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
@@ -22,6 +24,7 @@ const db = mysql.createConnection({
   user: "root",
   password: "Minitom4!!",
   database: "martial_arts_db",
+  connectionLimit: 10
 });
 
 
@@ -104,9 +107,7 @@ app.post("/api/signup", async (req, res) => {
           return res.status(400).send("Username already exists.");
         }
       }
-
       try {
-
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -123,9 +124,7 @@ app.post("/api/signup", async (req, res) => {
               console.error("Database error:", err);
               return res.status(500).send("Internal server error.");
             }
-
             console.log("Database results:", results);
-
             const user_id = results.insertId;
             console.log("User id:", user_id);
 
@@ -134,10 +133,8 @@ app.post("/api/signup", async (req, res) => {
               process.env.JWT_SECRET,
               { expiresIn: "1h" }
             );
-
             console.log("Generated token:", token);
             res.json({ token });
-
           }
         );
       } catch (error) {
@@ -149,66 +146,75 @@ app.post("/api/signup", async (req, res) => {
 });
 
 
-app.post("/api/signup-stats", (req, res) => {
-  const token = req.headers["authorization"]?.split(" ")[1];
+app.post("/api/signup-stats", async (req, res) => {
+  try {
+    console.log("Received request:", req.body);
 
-  if (!token) {
-    return res.status(403).json({ message: "Access denied. No token provided." });
-  }
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: "Invalid or expired token." });
+    const token = req.headers["authorization"]?.split(" ")[1];
+    if (!token) {
+      return res.status(403).json({ message: "Access denied. No token provided." });
     }
 
-    const user_id = decoded.user_id;
-    const { strength, agility, flexibility, combat, technique, patterns } = req.body;
-
-    if (
-      typeof strength !== "number" ||
-      typeof agility !== "number" ||
-      typeof flexibility !== "number" ||
-      typeof combat !== "number" ||
-      typeof technique !== "number" ||
-      typeof patterns !== "number"
-    ) {
-      return res.status(400).json({ message: "Invalid stats data." });
-    }
-
-    db.query("SELECT * FROM stats WHERE user_id = ?", [user_id], (err, results) => {
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {
-        console.error("Database error:", err);
-        return res.status(500).json({ message: "Internal server error." });
+        return res.status(401).json({ message: "Invalid or expired token." });
       }
 
-      if (results.length > 0) {
-        db.query(
-          "UPDATE stats SET strength = ?, agility = ?, flexibility = ?, combat = ?, technique = ?, patterns = ? WHERE user_id = ?",
-          [strength, agility, flexibility, combat, technique, patterns, user_id],
-          (err, results) => {
-            if (err) {
-              console.error("Database error:", err);
-              return res.status(500).json({ message: "Internal server error." });
-            }
-            res.status(200).json({ message: "Stats updated successfully." });
-          }
-        );
-      } else {
-        db.query(
-          "INSERT INTO stats (user_id, strength, agility, flexibility, combat, technique, patterns) VALUES (?, ?, ?, ?, ?, ?, ?)",
-          [user_id, strength, agility, flexibility, combat, technique, patterns],
-          (err, results) => {
-            if (err) {
-              console.error("Database error:", err);
-              return res.status(500).json({ message: "Internal server error." });
-            }
-            res.status(201).json({ message: "Stats created successfully." });
-          }
-        );
+      const user_id = decoded.user_id;
+      const { strength, agility, flexibility, combat, technique, patterns } = req.body;
+
+      // Validate stats data
+      if (
+        [strength, agility, flexibility, combat, technique, patterns].some(val => typeof val !== "number")
+      ) {
+        return res.status(400).json({ message: "Invalid stats data. All fields must be numbers." });
       }
+
+      console.log("Querying database...");
+      db.query("SELECT * FROM stats WHERE user_id = ?", [user_id], (err, results) => {
+        if (err) {
+          console.error("Database error:", err);
+          return res.status(500).json({ message: "Internal server error." });
+        }
+
+        if (results.length > 0) {
+          console.log("Updating existing stats...");
+          db.query(
+            "UPDATE stats SET strength = ?, agility = ?, flexibility = ?, combat = ?, technique = ?, patterns = ? WHERE user_id = ?",
+            [strength, agility, flexibility, combat, technique, patterns, user_id],
+            (err) => {
+              if (err) {
+                console.error("Database update error:", err);
+                return res.status(500).json({ message: "Failed to update stats." });
+              }
+              console.log("Stats updated successfully.");
+              return res.status(200).json({ message: "Stats updated successfully." });
+            }
+          );
+        } else {
+          console.log("Creating new stats entry...");
+          db.query(
+            "INSERT INTO stats (user_id, strength, agility, flexibility, combat, technique, patterns) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [user_id, strength, agility, flexibility, combat, technique, patterns],
+            (err) => {
+              if (err) {
+                console.error("Database insert error:", err);
+                return res.status(500).json({ message: "Failed to create stats." });
+              }
+              console.log("New stats entry created successfully.");
+              return res.status(201).json({ message: "Stats created successfully." });
+            }
+          );
+        }
+      });
     });
-  });
+  } catch (error) {
+    console.error("Unhandled server error:", error);
+    res.status(500).json({ message: "Unexpected server error." });
+  }
 });
+
+
 
 
 app.get("/api/stats", (req, res) => {
