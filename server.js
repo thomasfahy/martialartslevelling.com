@@ -251,7 +251,20 @@ app.get("/api/stats", (req, res) => {
   });
 });
 
-// Start server
+app.post('/api/incrementStats', (req, res) => {
+  const { increment } = req.body;
+
+  // Here, increment all users' stats (just an example of adding +1)
+  // In a real case, you would interact with a database or data store
+  // Increment stats for all users (example logic)
+  // You can customize this part based on your requirements
+
+  console.log(`Incrementing stats by ${increment} for all users.`);
+
+  res.json({ message: `Stats incremented by ${increment} for all users.` });
+});
+
+
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
 });
