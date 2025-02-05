@@ -163,7 +163,6 @@ app.post("/api/signup-stats", async (req, res) => {
       const user_id = decoded.user_id;
       const { strength, agility, flexibility, combat, technique, patterns } = req.body;
 
-      // Validate stats data
       if (
         [strength, agility, flexibility, combat, technique, patterns].some(val => typeof val !== "number")
       ) {
@@ -214,9 +213,6 @@ app.post("/api/signup-stats", async (req, res) => {
   }
 });
 
-
-
-
 app.get("/api/stats", (req, res) => {
   console.log("trying to get STATS")
   const token = req.headers["authorization"]?.split(" ")[1];
@@ -251,19 +247,43 @@ app.get("/api/stats", (req, res) => {
   });
 });
 
-app.post('/api/incrementStats', (req, res) => {
-  const { increment } = req.body;
+app.post('/api/attendClass', (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  console.log(token);
+  if (!token) {
+    return res.status(403).send("Access denied. No token provided.");
+  }
 
-  // Here, increment all users' stats (just an example of adding +1)
-  // In a real case, you would interact with a database or data store
-  // Increment stats for all users (example logic)
-  // You can customize this part based on your requirements
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Invalid or expired token.");
+    }
 
-  console.log(`Incrementing stats by ${increment} for all users.`);
+    const updateStatsQuery = `
+      UPDATE stats
+      SET patterns = patterns + 1,
+          technique = technique + 1,
+          strength = strength + 1,
+          agility = agility + 1,
+          flexibility = flexibility + 1,
+          combat = combat + 1
+      WHERE user_id = ?`;
 
-  res.json({ message: `Stats incremented by ${increment} for all users.` });
+    const user_id = decoded.user_id;  
+
+    db.query(updateStatsQuery, [user_id], (err, results) => {
+      if (err) {
+        console.error('Error updating stats:', err);
+        return res.status(500).send('Failed to update stats.');
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).send("No stats found for this user.");
+      }
+      res.json({ message: 'Stats incremented by +1 for your profile' });
+    });
+  });
 });
-
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");

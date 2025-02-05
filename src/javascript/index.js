@@ -9,8 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!token) {
           window.location.href = "/login.html";
           return;
-        } else{attendClass()};
+        }
       });
+  attendClass();    
   const token = localStorage.getItem("jwtToken");
   console.log("Token being sent:", token);    
   fetch(`http://localhost:3000/api/stats`, {
@@ -131,7 +132,7 @@ function showNotification(message, stats = {}) {
   
 }
 
-showNotification("You have entered the dungeon. Prepare for battle!", {strength: 30});
+showNotification("You have entered the dungeon. Prepare for battle!");
 showNotification("Level up!", { strength: 1, agility: 2, combat: 0 });
 
 

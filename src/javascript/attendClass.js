@@ -1,16 +1,19 @@
 
 export function attendClass() {
+    const token = localStorage.getItem("jwtToken");
     const attendButton = document.getElementById("attend-class");
     if (!attendButton) {
       console.error("Button with id 'attend-class' not found.");
       return;
     }
     attendButton.addEventListener("click", async () => {
+      console.error("Attend class event added");
       try {
         const response = await fetch('/api/attendClass', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({ increment: 1 }),
         });
