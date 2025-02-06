@@ -1,3 +1,5 @@
+import { fetchStats } from "./index";
+import { showNotification } from "./notificationQueue.js";
 
 export function attendClass() {
     const token = localStorage.getItem("jwtToken");
@@ -7,9 +9,8 @@ export function attendClass() {
       return;
     }
     attendButton.addEventListener("click", async () => {
-      console.error("Attend class event added");
       try {
-        const response = await fetch('/api/attendClass', {
+        const response = await fetch('http://localhost:3000/api/attendClass', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -19,7 +20,9 @@ export function attendClass() {
         });
         if (response.ok) {
           const data = await response.json();
-          showNotification("Congratulations! You have attended class today");
+          fetchStats();
+          showNotification("Congratulations, You have attended class today!", { patterns: 1, technique: 1, strength: 1, agility: 1, flexibility: 1, combat: 1 });
+
         } else {
           console.error("Failed to increment stats.");
         }
