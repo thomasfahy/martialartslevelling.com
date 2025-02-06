@@ -213,7 +213,7 @@ app.post("/api/signup-stats", async (req, res) => {
   }
 });
 
-app.get("/api/stats", (req, res) => {
+app.get("/api/getStats", (req, res) => {
   console.log("trying to get STATS")
   const token = req.headers["authorization"]?.split(" ")[1];
   console.log(token);

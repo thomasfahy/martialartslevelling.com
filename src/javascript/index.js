@@ -26,7 +26,7 @@ export function fetchStats() {
       return;
   }
 
-  fetch(`http://localhost:3000/api/stats`, {
+  fetch(`http://localhost:3000/api/getStats`, {
       method: "GET",
       headers: {
           "Authorization": `Bearer ${token}`,
