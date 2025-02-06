@@ -228,7 +228,7 @@ app.get("/api/stats", (req, res) => {
     const user_id = decoded.user_id;
 
     db.query(
-      "SELECT patterns, technique, strength, agility, flexibility, combat FROM stats WHERE user_id = ?",
+      "SELECT patterns, technique, strength, agility, flexibility, combat, level, current_xp, xp_to_next_level FROM stats WHERE user_id = ?",
       [user_id],
       (err, results) => {
         console.log(results);

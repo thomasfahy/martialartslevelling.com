@@ -153,12 +153,28 @@ body {
   justify-self: center;
 }
 
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 5px #00aaff; }
+  50% { box-shadow: 0 0 10px #00aaff, 0 0 15px #0077b6; }
+  100% { box-shadow: 0 0 5px #00aaff; }
+}
+
+@keyframes fillAnimation {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes flicker {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
 .xp-container {
   width: 80%;
   max-width: 800px;
   margin: auto;
   padding: 20px;
-  background: #1a1a2e;
   border-radius: 10px;
 }
 
@@ -170,7 +186,8 @@ body {
   overflow: hidden;
   margin-top: 10px;
   height: 30px;
-  justify-self: center;
+  position: relative;
+  animation: pulseGlow 2s infinite alternate;
 }
 
 .xp-fill {
@@ -181,7 +198,8 @@ body {
   line-height: 30px;
   font-weight: bold;
   color: white;
-  transition: width 0.5s ease-in-out;
+  transform-origin: left;
+  animation: fillAnimation 1s ease-in-out;
 }
 
 button {
