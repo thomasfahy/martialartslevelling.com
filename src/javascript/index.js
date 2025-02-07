@@ -1,5 +1,7 @@
 import "../styles/styles.css";
 import "../styles/notificationPopup.css";
+import "../styles/leveling.css"
+import { levelUp } from "./leveling.js";
 import { showNotification } from "./notificationQueue.js";
 import { attendClass } from "./attendClass.js";
 
@@ -13,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
       });
+  levelUp();
   attendClass();    
   fetchStats();
 });
@@ -74,10 +77,6 @@ document.getElementById("logoutButton").addEventListener("click", () => {
   localStorage.removeItem("jwtToken");
   window.location.href = "/login.html"; 
 });
-
-// XP BAR SCRIPT
-
-
 
 
 showNotification("You have entered the dungeon. Prepare for battle!");
