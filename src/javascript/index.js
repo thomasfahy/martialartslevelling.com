@@ -79,6 +79,25 @@ document.getElementById("logoutButton").addEventListener("click", () => {
 });
 
 
+export async function fetchRandomQuests() {
+  try {
+      const response = await fetch("http://localhost:3000/api/random-quests");
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const quests = await response.json();
+      console.log("Random Quests:", quests);
+      
+      return quests; // Return the data if needed for UI updates
+  } catch (error) {
+      console.error("Error fetching quests:", error);
+  }
+}
+
+fetchRandomQuests();
+
+
 showNotification("You have entered the dungeon. Prepare for battle!");
 showNotification("Level up!", { strength: 1, agility: 2, combat: 0 }); 
 

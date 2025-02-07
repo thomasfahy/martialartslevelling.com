@@ -247,6 +247,17 @@ app.get("/api/getStats", (req, res) => {
   });
 });
 
+app.get("/api/random-quests", (req, res) => {
+  console.log("Grabbing 3 random quests");
+  const query = "SELECT * FROM quests ORDER BY RAND() LIMIT 3";
+  
+  db.query(query, (err, results) => {
+      if (err) {
+          return res.status(500).json({ error: "Database query failed" });
+      }
+      res.json(results);
+  });
+});
 
 app.post('/api/attendClass', (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];

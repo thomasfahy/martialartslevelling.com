@@ -75,3 +75,7 @@
 #quest-close-button{
     justify-self: center;
 }
+
+.quest-stat-gain-text{
+    font-size: 1.2rem;
+}
