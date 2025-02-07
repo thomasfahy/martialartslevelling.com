@@ -58,18 +58,14 @@ export async function levelUp() {
 
             questTile.appendChild(statContainer);
 
-            // Create the Accept and Reject buttons
             const acceptButton = document.createElement("button");
             acceptButton.className = "accept-quest";
             acceptButton.innerText = "Accept Quest";
-            acceptButton.dataset.quest = quest.quest_id;  // Set the quest ID to the button's data attribute
-
+            acceptButton.dataset.quest = quest.quest_id;  
             const rejectButton = document.createElement("button");
             rejectButton.className = "reject-quest";
             rejectButton.innerText = "Reject Quest";
-            rejectButton.dataset.quest = quest.quest_id;  // Set the quest ID to the button's data attribute
-
-            // Append the buttons to the quest tile
+            rejectButton.dataset.quest = quest.quest_id;  
             questTile.appendChild(acceptButton);
             questTile.appendChild(rejectButton);
 
@@ -90,7 +86,6 @@ export async function levelUp() {
         overlay.appendChild(popup);
         document.body.appendChild(overlay);
 
-        // Add event listeners for accept and reject buttons
         document.querySelectorAll(".accept-quest").forEach(button => {
             button.addEventListener("click", (e) => {
                 const questId = e.target.dataset.quest;
@@ -135,7 +130,6 @@ function createStatElement(statName, statValue) {
         statElement.className = "quest-stat-gain-text";
         const statNameColor = "#00a8ff";
 
-        // Display the stat value in green and bold
         const statValueColor = "green";
         const statValueStyle = "font-weight: bold; color: " + statValueColor + ";";
 
