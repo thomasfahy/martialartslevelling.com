@@ -28,7 +28,7 @@ export async function levelUp() {
             
             questTile.innerHTML = `
                 <p style="color: ${getQuestColor(quest.quest_size)}; font-weight: bold;">${getQuestSize(quest.quest_size)}</p>
-                <h3>${quest.quest_title}</h3>
+                <h3 class="choose-quest-title">${quest.quest_title}</h3>
             `;
             
             const questDescription = document.createElement("p");
@@ -62,7 +62,7 @@ export async function levelUp() {
             questTile.appendChild(message);
 
             const statContainer = document.createElement("div");
-            statContainer.className = "stat-container";
+            statContainer.className = "quest-stat-container";
             
             const stats = [
                 createStatElement("Patterns", quest.patterns_gain),
@@ -83,14 +83,19 @@ export async function levelUp() {
 
             const acceptButton = document.createElement("button");
             acceptButton.className = "accept-quest";
-            acceptButton.innerText = "Accept Quest";
+            acceptButton.innerText = "Accept";
             acceptButton.dataset.quest = quest.quest_id;  
             const rejectButton = document.createElement("button");
             rejectButton.className = "reject-quest";
-            rejectButton.innerText = "Reject Quest";
-            rejectButton.dataset.quest = quest.quest_id;  
-            questTile.appendChild(acceptButton);
-            questTile.appendChild(rejectButton);
+            rejectButton.innerText = "Reject";
+            rejectButton.dataset.quest = quest.quest_id;
+            
+            const questTileButtonContainer = document.createElement("div");
+            questTileButtonContainer.classList.add("quest-tile-button-container");
+
+            questTileButtonContainer.appendChild(acceptButton);
+            questTileButtonContainer.appendChild(rejectButton);
+            questTile.appendChild(questTileButtonContainer);
 
             questContainer.appendChild(questTile);
         });
@@ -173,24 +178,58 @@ function createStatElement(statName, statValue) {
     if (statValue > 0) {
         const statElement = document.createElement("p");
         statElement.className = "quest-stat-gain-text";
-        const statNameColor = "#00a8ff";
 
-        const statValueColor = "green";
-        const statValueStyle = "font-weight: bold; color: " + statValueColor + ";";
+        let statIcon = '';
+        let statColor = '';
 
-        statElement.innerHTML = `<strong style="color: ${statNameColor};">[${statName}]</strong> <span style="${statValueStyle}">+${statValue}</span>`;
+        switch (statName) {
+            case "Patterns":
+                statIcon = "🌀";
+                statColor = "#3498db";
+                break;
+            case "Technique":
+                statIcon = "⚙️";
+                statColor = "#9b59b6";
+                break;
+            case "Strength":
+                statIcon = "💪";
+                statColor = "#e74c3c";
+                break;
+            case "Agility":
+                statIcon = "🏃";
+                statColor = "#2ecc71";
+                break;
+            case "Flexibility":
+                statIcon = "🤸";
+                statColor = "#f39c12";
+                break;
+            case "Combat":
+                statIcon = "⚔️";
+                statColor = "#e67e22";
+                break;
+            default:
+                statIcon = "❓";
+                statColor = "#7f8c8d";
+                break;
+        }
+
+        const statNameColor = statColor;
+        const statValueColor = "white";
+
+        const statValueStyle = `font-size: 1.1rem; font-weight: bold; color: ${statValueColor};`;
         
+        statElement.innerHTML = `<strong style="color: ${statNameColor};">${statIcon} ${statName}</strong> <span style="${statValueStyle}">+${statValue}</span>`;
+
         return statElement;
     }
     return null;
 }
 
-// Function to Create Quest Steps
 function createStepElement(stepName, stepGoal, stepUnit) {
     if (stepName && stepGoal > 0) {
         const stepElement = document.createElement("p");
         stepElement.className = "quest-step";
-        stepElement.innerHTML = `<strong style="color: #e84118;">${stepName}:</strong> <span style="color: green;">${stepGoal} ${stepUnit}</span>`;
+        stepElement.innerHTML = `<strong style="color:rgb(255, 255, 255);">${stepName}:</strong> <span style="color: green;">${stepGoal} ${stepUnit}</span>`;
         return stepElement;
     }
     return null;

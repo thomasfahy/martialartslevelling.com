@@ -40,17 +40,14 @@ function createQuestStepElement(stepName, stepCurrent, stepGoal, stepUnit) {
     const stepContainer = document.createElement("div");
     stepContainer.className = "quest-step";
 
-    // Create checkbox
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.className = "quest-step-checkbox";
 
-    // Label for step progress
     const stepLabel = document.createElement("label");
     stepLabel.className = "quest-step-label";
     stepLabel.innerHTML = `${stepName}: <span class="progress">${stepCurrent}/${stepGoal}</span> ${stepUnit || ""}`;
 
-    // Mark step complete when checked
     checkbox.addEventListener("change", () => {
         if (checkbox.checked) {
             stepLabel.innerHTML = `${stepName}: <span class="progress">${stepGoal}/${stepGoal}</span> ${stepUnit || ""}`;
@@ -64,6 +61,38 @@ function createQuestStepElement(stepName, stepCurrent, stepGoal, stepUnit) {
 
     return stepContainer;
 }
+
+function appendStatGains(questData, questContainer) {
+    const statContainer = document.createElement("div");
+    statContainer.className = "stat-gain-container";
+
+    const stats = [
+        { name: "Patterns", value: questData.patterns_gain, icon: "🌀", color: "#3498db" },
+        { name: "Technique", value: questData.technique_gain, icon: "⚙️", color: "#9b59b6" },
+        { name: "Strength", value: questData.strength_gain, icon: "💪", color: "#e74c3c" },
+        { name: "Agility", value: questData.agility_gain, icon: "🏃", color: "#2ecc71" },
+        { name: "Flexibility", value: questData.flexibility_gain, icon: "🤸", color: "#f39c12" },
+        { name: "Combat", value: questData.combat_gain, icon: "⚔️", color: "#e67e22" }
+    ];
+
+    stats.forEach(stat => {
+        if (stat.value > 0) {
+            const statElement = document.createElement("div");
+            statElement.className = "quest-stat-gain";
+            statElement.innerHTML = `
+                <span style="font-size: 1.5em;">${stat.icon}</span>
+                <strong style="color: ${stat.color}; margin-left: 5px;">${stat.name}</strong>
+                <span style="font-weight: bold; color: ${stat.color}; margin-left: 10px;">+${stat.value}</span>
+            `;
+            statContainer.appendChild(statElement);
+        }
+    });
+
+    if (statContainer.children.length > 0) {
+        questContainer.appendChild(statContainer);
+    }
+}
+
 
 function createActiveQuestWindow(questData) {
 
@@ -109,4 +138,6 @@ function createActiveQuestWindow(questData) {
             questStepsContainer.appendChild(createQuestStepElement(stepName, stepCurrent, stepGoal, stepUnit));
         }
     }
+
+    appendStatGains(questData, activeQuestContainer);
 }

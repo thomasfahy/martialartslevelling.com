@@ -99,6 +99,25 @@ body {
   align-items: center;
 }
 
+.stat-name.patterns::before { content: "🌀"; margin-right: 10px;}
+.stat-name.patterns { color: #3498db;}
+
+.stat-name.technique::before { content: "⚙️"; margin-right: 10px;}
+.stat-name.technique{  color: #9b59b6; }
+
+.stat-name.strength::before { content: "💪"; margin-right: 10px;}
+.stat-name.strength { color: #e74c3c;}
+
+.stat-name.agility::before { content: "🏃"; margin-right: 10px;}
+.stat-name.agility{color: #2ecc71;}
+
+.stat-name.flexibility::before { content: "🤸"; margin-right: 10px;}
+.stat-name.flexibility{color: #f39c12;}
+
+.stat-name.combat::before { content: "⚔️"; margin-right: 10px;}
+.stat-name.combat{ color: #e67e22; }
+
+
 .stat-info {
   display: flex;
   justify-content: space-between;
@@ -106,9 +125,6 @@ body {
   align-items: center;
 }
 
-.stat-name {
-  flex: 1;
-}
 
 .stat-value {
   margin-right: 1rem;
