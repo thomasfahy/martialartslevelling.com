@@ -296,6 +296,48 @@ app.post('/api/attendClass', (req, res) => {
   });
 });
 
+app.post("/api/accept-quest", async (req, res) => {
+    const { user_id, quest_id } = req.body;
+    
+    console.log("Received user_id:", user_id);
+    console.log("Received quest_id:", quest_id);
+
+
+    try {
+        const query = `
+            INSERT INTO active_quest (
+                user_id, quest_id, quest_title, quest_description, quest_size, time_to_complete, 
+                patterns_gain, technique_gain, strength_gain, agility_gain, flexibility_gain, combat_gain, quest_difficulty
+            )
+            SELECT 
+                ?, quest_id, quest_title, quest_description, quest_size, time_to_complete, 
+                patterns_gain, technique_gain, strength_gain, agility_gain, flexibility_gain, combat_gain, quest_difficulty
+            FROM quests
+            WHERE quest_id = ?
+            ON DUPLICATE KEY UPDATE 
+                quest_id = VALUES(quest_id),
+                quest_title = VALUES(quest_title),
+                quest_description = VALUES(quest_description),
+                quest_size = VALUES(quest_size),
+                time_to_complete = VALUES(time_to_complete),
+                patterns_gain = VALUES(patterns_gain),
+                technique_gain = VALUES(technique_gain),
+                strength_gain = VALUES(strength_gain),
+                agility_gain = VALUES(agility_gain),
+                flexibility_gain = VALUES(flexibility_gain),
+                combat_gain = VALUES(combat_gain),
+                quest_difficulty = VALUES(quest_difficulty);
+        `;
+
+        await db.execute(query, [user_id, quest_id]);
+
+        res.json({ success: true, message: "Quest accepted!" });
+      }  catch (error) {
+        console.error("Error accepting quest:", error);
+        res.status(500).json({ success: false, message: "Database error." });
+    }
+});
+
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
 });

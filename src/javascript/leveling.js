@@ -87,12 +87,32 @@ export async function levelUp() {
         document.body.appendChild(overlay);
 
         document.querySelectorAll(".accept-quest").forEach(button => {
-            button.addEventListener("click", (e) => {
+            button.addEventListener("click", async (e) => {
                 const questId = e.target.dataset.quest;
-                alert(`Quest Accepted: ${questId}`);
-                document.body.removeChild(overlay);
+                const token = localStorage.getItem("jwtToken");
+                const payload = JSON.parse(atob(token.split(".")[1]));
+                const userId = payload.user_id; // Extract user_id
+
+                try {
+                    const response = await fetch("http://localhost:3000/api/accept-quest", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ user_id: userId, quest_id: questId })
+                    });
+        
+                    const data = await response.json();
+                    if (data.success) {
+                        alert("Quest accepted!");
+                        console.log(data);
+                    } else {
+                        alert("Failed to accept quest.");
+                    }
+                } catch (error) {
+                    console.error("Error accepting quest:", error);
+                }
             });
         });
+        
 
         document.querySelectorAll(".reject-quest").forEach(button => {
             button.addEventListener("click", (e) => {
@@ -154,3 +174,6 @@ async function fetchRandomQuests() {
         return [];
     }
 }
+
+
+///////// TRACK CURRENT QUEST
