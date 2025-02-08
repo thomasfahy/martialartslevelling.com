@@ -98,9 +98,5 @@ export async function fetchRandomQuests() {
 fetchRandomQuests();
 
 
-showNotification("You have entered the dungeon. Prepare for battle!");
-showNotification("Level up!", { strength: 1, agility: 2, combat: 0 }); 
-
-
 
 

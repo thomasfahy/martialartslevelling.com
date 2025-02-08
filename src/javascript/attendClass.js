@@ -3,6 +3,10 @@ import { showNotification } from "./notificationQueue.js";
 
 export function attendClass() {
     const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      window.location.href="/login.html";
+      return;
+  }
     const attendButton = document.getElementById("attend-class");
     if (!attendButton) {
       console.error("Button with id 'attend-class' not found.");

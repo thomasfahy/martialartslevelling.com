@@ -1,3 +1,5 @@
+import { newActiveQuest } from "./activeQuest";
+
 export async function levelUp() {
     const levelUpButton = document.getElementById("level-up");
 
@@ -32,6 +34,27 @@ export async function levelUp() {
             const questDescription = document.createElement("p");
             questDescription.innerText = quest.quest_description;
             questTile.appendChild(questDescription);
+
+            // Add Quest Steps
+            const stepContainer = document.createElement("div");
+            stepContainer.className = "quest-steps";
+
+            const steps = [
+                createStepElement(quest.quest_step_name1, quest.quest_step_goal1, quest.quest_step_unit1),
+                createStepElement(quest.quest_step_name2, quest.quest_step_goal2, quest.quest_step_unit2),
+                createStepElement(quest.quest_step_name3, quest.quest_step_goal3, quest.quest_step_unit3),
+                createStepElement(quest.quest_step_name4, quest.quest_step_goal4, quest.quest_step_unit4)
+            ];
+
+            steps.forEach(step => {
+                if (step !== null) {
+                    stepContainer.appendChild(step);
+                }
+            });
+
+            if (stepContainer.children.length > 0) {
+                questTile.appendChild(stepContainer);
+            }
 
             const message = document.createElement("p");
             message.innerText = "Completing this quest will award you -->";
@@ -91,7 +114,7 @@ export async function levelUp() {
                 const questId = e.target.dataset.quest;
                 const token = localStorage.getItem("jwtToken");
                 const payload = JSON.parse(atob(token.split(".")[1]));
-                const userId = payload.user_id; // Extract user_id
+                const userId = payload.user_id;
 
                 try {
                     const response = await fetch("http://localhost:3000/api/accept-quest", {
@@ -103,7 +126,9 @@ export async function levelUp() {
                     const data = await response.json();
                     if (data.success) {
                         alert("Quest accepted!");
+                        document.body.removeChild(overlay);
                         console.log(data);
+                        newActiveQuest();
                     } else {
                         alert("Failed to accept quest.");
                     }
@@ -124,7 +149,7 @@ export async function levelUp() {
     });
 }
 
-function getQuestSize(size) {
+export function getQuestSize(size) {
     switch(size) {
         case 1: return "Small Quest";
         case 2: return "Medium Quest";
@@ -134,7 +159,7 @@ function getQuestSize(size) {
     }
 }
 
-function getQuestColor(size) {
+export function getQuestColor(size) {
     switch(size) {
         case 1: return "#00a8ff";
         case 2: return "yellow";
@@ -160,6 +185,17 @@ function createStatElement(statName, statValue) {
     return null;
 }
 
+// Function to Create Quest Steps
+function createStepElement(stepName, stepGoal, stepUnit) {
+    if (stepName && stepGoal > 0) {
+        const stepElement = document.createElement("p");
+        stepElement.className = "quest-step";
+        stepElement.innerHTML = `<strong style="color: #e84118;">${stepName}:</strong> <span style="color: green;">${stepGoal} ${stepUnit}</span>`;
+        return stepElement;
+    }
+    return null;
+}
+
 async function fetchRandomQuests() {
     try {
         const response = await fetch("http://localhost:3000/api/random-quests");
@@ -174,6 +210,3 @@ async function fetchRandomQuests() {
         return [];
     }
 }
-
-
-///////// TRACK CURRENT QUEST

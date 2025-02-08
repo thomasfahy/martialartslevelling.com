@@ -1,0 +1,112 @@
+import "../styles/active-quest.css";
+import { getQuestSize } from "./leveling";
+import { getQuestColor } from "./leveling";
+
+export async function newActiveQuest() {
+    const token = localStorage.getItem("jwtToken"); // Retrieve JWT from localStorage
+
+    if (!token) {
+        window.location.href = "/login.html";
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:3000/api/get-active-quest", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`, // Send JWT in the Authorization header
+                "Content-Type": "application/json"
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            if (data.message) {
+                console.log(data.message); // "No active quest found."
+            } else {
+                console.log("Active Quest:", data);
+                createActiveQuestWindow(data); // Make sure this is being called
+            }
+        } else {
+            console.error("Error fetching active quest:", data.message);
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+}
+
+function createQuestStepElement(stepName, stepCurrent, stepGoal, stepUnit) {
+    const stepContainer = document.createElement("div");
+    stepContainer.className = "quest-step";
+
+    // Create checkbox
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "quest-step-checkbox";
+
+    // Label for step progress
+    const stepLabel = document.createElement("label");
+    stepLabel.className = "quest-step-label";
+    stepLabel.innerHTML = `${stepName}: <span class="progress">${stepCurrent}/${stepGoal}</span> ${stepUnit || ""}`;
+
+    // Mark step complete when checked
+    checkbox.addEventListener("change", () => {
+        if (checkbox.checked) {
+            stepLabel.innerHTML = `${stepName}: <span class="progress">${stepGoal}/${stepGoal}</span> ${stepUnit || ""}`;
+        } else {
+            stepLabel.innerHTML = `${stepName}: <span class="progress">${stepCurrent}/${stepGoal}</span> ${stepUnit || ""}`;
+        }
+    });
+
+    stepContainer.appendChild(checkbox);
+    stepContainer.appendChild(stepLabel);
+
+    return stepContainer;
+}
+
+function createActiveQuestWindow(questData) {
+
+    
+    const leftContainer = document.querySelector(".left-container");
+
+    const activeQuestContainer = document.createElement("div");
+    activeQuestContainer.classList.add("active-quest-container");
+
+    leftContainer.appendChild(activeQuestContainer);
+
+    const activeQuestWindowTitle = document.createElement("div");
+    activeQuestWindowTitle.classList.add("active-quest-window-title");
+    activeQuestWindowTitle.textContent = "Active Quest";
+    activeQuestContainer.appendChild(activeQuestWindowTitle);
+
+    const activeQuestTitleContainer = document.createElement("div");
+    activeQuestTitleContainer.classList.add("active-quest-title-container");
+    activeQuestContainer.appendChild(activeQuestTitleContainer);
+
+    const activeQuestSize = document.createElement("div");
+    activeQuestSize.classList.add("active-quest-size");
+    activeQuestSize.textContent = getQuestSize(questData.quest_size);
+    activeQuestSize.style.color = getQuestColor(questData.quest_size);
+    activeQuestTitleContainer.appendChild(activeQuestSize);
+
+    const activeQuestTitle = document.createElement("div");
+    activeQuestTitle.classList.add("active-quest-title");
+    activeQuestTitle.textContent = questData.quest_title;
+    activeQuestTitleContainer.appendChild(activeQuestTitle);
+
+    const questStepsContainer = document.createElement("div");
+    questStepsContainer.classList.add("quest-step-container");
+    activeQuestContainer.appendChild(questStepsContainer);
+
+    for (let i = 1; i <= 4; i++) {
+        const stepName = questData[`quest_step_name${i}`];
+        const stepCurrent = questData[`quest_step_current${i}`];
+        const stepGoal = questData[`quest_step_goal${i}`];
+        const stepUnit = questData[`quest_step_unit${i}`];
+    
+        if (stepName) {
+            questStepsContainer.appendChild(createQuestStepElement(stepName, stepCurrent, stepGoal, stepUnit));
+        }
+    }
+}

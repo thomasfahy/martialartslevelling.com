@@ -1,0 +1,32 @@
+/* Active Quest Window Styles */
+.active-quest-container {
+    width: 23vw;
+    margin: 0 auto;
+    padding: 20px;
+    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    border-radius: 10px;
+    border: 2px solid #00aaff;
+    box-shadow: 0 0 20px rgba(0, 168, 255, 0.5);
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .active-quest-window-title{
+    justify-self: center;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #00a8ff;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(0, 168, 255, 0.7); 
+  }
+
+  .active-quest-title-container{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    margin-top: 20px;
+    font-size: 1.1rem;
+  }
+
+  .quest-step-container{
+    /*fill here */
+  }

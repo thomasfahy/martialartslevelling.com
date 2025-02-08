@@ -29,6 +29,7 @@ const db = mysql.createConnection({
 
 
 
+
 db.connect((err) => {
   if (err) {
     console.error("Database connection failed: " + err.stack);
@@ -298,35 +299,58 @@ app.post('/api/attendClass', (req, res) => {
 
 app.post("/api/accept-quest", async (req, res) => {
     const { user_id, quest_id } = req.body;
-    
+
     console.log("Received user_id:", user_id);
     console.log("Received quest_id:", quest_id);
 
-
     try {
         const query = `
-            INSERT INTO active_quest (
-                user_id, quest_id, quest_title, quest_description, quest_size, time_to_complete, 
-                patterns_gain, technique_gain, strength_gain, agility_gain, flexibility_gain, combat_gain, quest_difficulty
-            )
-            SELECT 
-                ?, quest_id, quest_title, quest_description, quest_size, time_to_complete, 
-                patterns_gain, technique_gain, strength_gain, agility_gain, flexibility_gain, combat_gain, quest_difficulty
-            FROM quests
-            WHERE quest_id = ?
-            ON DUPLICATE KEY UPDATE 
-                quest_id = VALUES(quest_id),
-                quest_title = VALUES(quest_title),
-                quest_description = VALUES(quest_description),
-                quest_size = VALUES(quest_size),
-                time_to_complete = VALUES(time_to_complete),
-                patterns_gain = VALUES(patterns_gain),
-                technique_gain = VALUES(technique_gain),
-                strength_gain = VALUES(strength_gain),
-                agility_gain = VALUES(agility_gain),
-                flexibility_gain = VALUES(flexibility_gain),
-                combat_gain = VALUES(combat_gain),
-                quest_difficulty = VALUES(quest_difficulty);
+        INSERT INTO active_quest (
+            user_id, quest_id, quest_title, quest_description, quest_size, time_to_complete, 
+            patterns_gain, technique_gain, strength_gain, agility_gain, flexibility_gain, combat_gain, quest_difficulty,
+            quest_step_name1, quest_step_current1, quest_step_goal1, quest_step_unit1,
+            quest_step_name2, quest_step_current2, quest_step_goal2, quest_step_unit2,
+            quest_step_name3, quest_step_current3, quest_step_goal3, quest_step_unit3,
+            quest_step_name4, quest_step_current4, quest_step_goal4, quest_step_unit4
+        )
+        SELECT 
+            ?, quest_id, quest_title, quest_description, quest_size, time_to_complete, 
+            patterns_gain, technique_gain, strength_gain, agility_gain, flexibility_gain, combat_gain, quest_difficulty,
+            quest_step_name1, 0, quest_step_goal1, quest_step_unit1,  -- Set current progress to 0
+            quest_step_name2, 0, quest_step_goal2, quest_step_unit2,
+            quest_step_name3, 0, quest_step_goal3, quest_step_unit3,
+            quest_step_name4, 0, quest_step_goal4, quest_step_unit4
+        FROM quests
+        WHERE quest_id = ?
+        ON DUPLICATE KEY UPDATE 
+            quest_id = VALUES(quest_id),
+            quest_title = VALUES(quest_title),
+            quest_description = VALUES(quest_description),
+            quest_size = VALUES(quest_size),
+            time_to_complete = VALUES(time_to_complete),
+            patterns_gain = VALUES(patterns_gain),
+            technique_gain = VALUES(technique_gain),
+            strength_gain = VALUES(strength_gain),
+            agility_gain = VALUES(agility_gain),
+            flexibility_gain = VALUES(flexibility_gain),
+            combat_gain = VALUES(combat_gain),
+            quest_difficulty = VALUES(quest_difficulty),
+            quest_step_name1 = VALUES(quest_step_name1),
+            quest_step_current1 = VALUES(quest_step_current1),
+            quest_step_goal1 = VALUES(quest_step_goal1),
+            quest_step_unit1 = VALUES(quest_step_unit1),
+            quest_step_name2 = VALUES(quest_step_name2),
+            quest_step_current2 = VALUES(quest_step_current2),
+            quest_step_goal2 = VALUES(quest_step_goal2),
+            quest_step_unit2 = VALUES(quest_step_unit2),
+            quest_step_name3 = VALUES(quest_step_name3),
+            quest_step_current3 = VALUES(quest_step_current3),
+            quest_step_goal3 = VALUES(quest_step_goal3),
+            quest_step_unit3 = VALUES(quest_step_unit3),
+            quest_step_name4 = VALUES(quest_step_name4),
+            quest_step_current4 = VALUES(quest_step_current4),
+            quest_step_goal4 = VALUES(quest_step_goal4),
+            quest_step_unit4 = VALUES(quest_step_unit4);
         `;
 
         await db.execute(query, [user_id, quest_id]);
@@ -336,6 +360,40 @@ app.post("/api/accept-quest", async (req, res) => {
         console.error("Error accepting quest:", error);
         res.status(500).json({ success: false, message: "Database error." });
     }
+});
+
+app.get("/api/get-active-quest", (req, res) => {
+  console.log("trying to get ACTIVE QUEST")
+  const token = req.headers["authorization"]?.split(" ")[1];
+  console.log(token);
+  if (!token) {
+    return res.status(403).send("Access denied. No token provided.");
+  }
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Invalid or expired token.");
+    }
+
+    const user_id = decoded.user_id;
+
+    db.query(
+      "SELECT * FROM active_quest WHERE user_id = ?",
+      [user_id],
+      (err, results) => {
+        console.log(results);
+        if (err) {
+          console.error("Database error:", err);
+          return res.status(500).send("Database error.");
+        }
+
+        if (results.length === 0) {
+          return res.status(404).send("No active quest found for this user.");
+        }
+
+        res.json(results[0]);
+      }
+    );
+  });
 });
 
 app.listen(3000, () => {
