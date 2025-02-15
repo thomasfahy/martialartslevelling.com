@@ -1,6 +1,7 @@
 import "../styles/active-quest.css";
 import { updateUserStats } from "./stat-gain";
 import { createStatsPopup } from "./notificationQueue";
+import { createSystemGuidancePopup } from "./notificationQueue";
 
 export async function newActiveQuest() {
     const token = localStorage.getItem("jwtToken");
@@ -36,7 +37,7 @@ export async function newActiveQuest() {
     }
 }
 
-function createQuestStepElement(stepName, stepCurrent, stepGoal, stepUnit) {
+function createQuestStepElement(stepName, stepCurrent, stepGoal, stepUnit, stepLink) {
     const stepContainer = document.createElement("div");
     stepContainer.className = "active-quest-step";
 
@@ -47,6 +48,17 @@ function createQuestStepElement(stepName, stepCurrent, stepGoal, stepUnit) {
     const stepLabel = document.createElement("label");
     stepLabel.className = "quest-step-label";
     stepLabel.innerHTML = `${stepName}: <span class="progress">${stepCurrent}/${stepGoal}</span> ${stepUnit || ""}`;
+
+    const infoIcon = document.createElement("span");
+    infoIcon.className = "info-icon";
+    infoIcon.innerHTML = "❓";
+
+
+    infoIcon.addEventListener("click", () => {
+        createSystemGuidancePopup(stepLink, "This will be used to store the text from the DB");
+    });
+
+    stepLabel.appendChild(infoIcon);
 
     checkbox.addEventListener("change", () => {
         if (checkbox.checked) {
@@ -126,9 +138,10 @@ function createActiveQuestWindow(questData) {
         const stepCurrent = questData[`quest_step_current${i}`];
         const stepGoal = questData[`quest_step_goal${i}`];
         const stepUnit = questData[`quest_step_unit${i}`];
+        const stepLink = questData[`quest_step_guide_link${i}`];
     
         if (stepName) {
-            questStepsContainer.appendChild(createQuestStepElement(stepName, stepCurrent, stepGoal, stepUnit));
+            questStepsContainer.appendChild(createQuestStepElement(stepName, stepCurrent, stepGoal, stepUnit, stepLink));
         }
     }
 

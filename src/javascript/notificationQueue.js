@@ -71,6 +71,50 @@ export function createStatsPopup(message, stats) {
     }
 }
 
+export function createSystemGuidancePopup(youtubeUrl, guidanceText) {
+    const popupOverlay = document.createElement("div");
+    popupOverlay.classList.add("guidance-popup-overlay");
+
+    const popupContainer = document.createElement("div");
+    popupContainer.classList.add("guidance-popup-container");
+
+    const popupTitle = document.createElement("h2");
+    popupTitle.textContent = "System Guidance";
+    popupTitle.classList.add("guidance-popup-header")
+
+    const popupMessage = document.createElement("p");
+    popupMessage.textContent = guidanceText;
+
+    const youtubeEmbed = document.createElement("iframe");
+
+    youtubeEmbed.setAttribute("src", youtubeUrl);
+    youtubeEmbed.setAttribute("width", "1280");
+    youtubeEmbed.setAttribute("height", "720");
+    youtubeEmbed.setAttribute("frameborder", "0");
+    youtubeEmbed.removeAttribute("sandbox");
+    youtubeEmbed.setAttribute("allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
+    youtubeEmbed.setAttribute("allowfullscreen", true);
+    
+    youtubeEmbed.classList.add("guidance-popup-video");
+
+    const closeButton = document.createElement("button");
+    closeButton.textContent = "Close";
+    closeButton.classList.add("guidance-popup-close");
+
+    closeButton.addEventListener("click", () => {
+        popupOverlay.remove();
+    });
+
+    popupContainer.appendChild(popupTitle);
+    popupContainer.appendChild(popupMessage);
+    popupContainer.appendChild(youtubeEmbed);
+    popupContainer.appendChild(closeButton);
+
+    popupOverlay.appendChild(popupContainer);
+    document.body.appendChild(popupOverlay);
+}
+
+
 
 
 export function createLevelUpPopup(playerLevel, stats) {
