@@ -57,7 +57,7 @@ export async function levelUp() {
             }
 
             const message = document.createElement("p");
-            message.innerText = "Completing this quest will award you -->";
+            message.innerText = "You will gain the following Stats";
             message.style.fontWeight = "bold";
             questTile.appendChild(message);
 

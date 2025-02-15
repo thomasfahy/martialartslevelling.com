@@ -38,7 +38,7 @@ export async function newActiveQuest() {
 
 function createQuestStepElement(stepName, stepCurrent, stepGoal, stepUnit) {
     const stepContainer = document.createElement("div");
-    stepContainer.className = "quest-step";
+    stepContainer.className = "active-quest-step";
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
@@ -122,10 +122,11 @@ function createActiveQuestWindow(questData) {
     const activeQuestTitle = document.createElement("div");
     activeQuestTitle.classList.add("active-quest-title");
     activeQuestTitle.textContent = questData.quest_title;
+    activeQuestTitle.style.color = getQuestColor(questData.quest_size);
     activeQuestTitleContainer.appendChild(activeQuestTitle);
 
     const questStepsContainer = document.createElement("div");
-    questStepsContainer.classList.add("quest-step-container");
+    questStepsContainer.classList.add("active-quest-step-container");
     activeQuestContainer.appendChild(questStepsContainer);
 
     for (let i = 1; i <= 4; i++) {
@@ -139,5 +140,26 @@ function createActiveQuestWindow(questData) {
         }
     }
 
+    const questCompleteButton = document.createElement("button");
+    questCompleteButton.classList.add("active-quest-complete-button");
+    questCompleteButton.textContent = "Complete";
+    questCompleteButton.style.backgroundColor = "#00aaff";
+
+    const questAbandonButton = document.createElement("button");
+    questAbandonButton.classList.add("active-quest-abandon-button");
+    questAbandonButton.textContent = "Abandon";
+    questAbandonButton.style.backgroundColor = "#c0392b";
+
+    const activeQuestButtonContainer = document.createElement("div");
+    activeQuestButtonContainer.classList.add("active-quest-button-container");
+    activeQuestButtonContainer.appendChild(questAbandonButton);
+    activeQuestButtonContainer.appendChild(questCompleteButton);
+
     appendStatGains(questData, activeQuestContainer);
+
+    activeQuestContainer.appendChild(activeQuestButtonContainer);
+
+
+
+
 }
