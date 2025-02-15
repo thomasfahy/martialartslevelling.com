@@ -211,6 +211,7 @@ body {
 .xp-fill {
   height: 100%;
   width: 0%;
+  position: absolute;
   background: linear-gradient(145deg, #00a8ff, #0077b6);
   text-align: center;
   line-height: 30px;

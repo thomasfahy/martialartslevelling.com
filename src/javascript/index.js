@@ -58,6 +58,7 @@ export function fetchStats() {
   .catch((error) => {
       console.error("Error fetching stats:", error);
   });
+  
 }
 
 function updateStats(stats) {

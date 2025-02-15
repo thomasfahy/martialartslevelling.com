@@ -68,7 +68,7 @@ app.post("/api/login", (req, res) => {
         return res.status(400).send("Invalid email or password.");
       }
       const token = jwt.sign(
-        { user_id: user.user_id, email: user.email },
+        { user_id: user.user_id, email: user.email},
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
@@ -423,6 +423,39 @@ app.get("/api/get-active-quest", (req, res) => {
 
     db.query(
       "SELECT * FROM active_quest WHERE user_id = ?",
+      [user_id],
+      (err, results) => {
+        console.log(results);
+        if (err) {
+          console.error("Database error:", err);
+          return res.status(500).send("Database error.");
+        }
+
+        if (results.length === 0) {
+          return res.status(404).send("No active quest found for this user.");
+        }
+
+        res.json(results[0]);
+      }
+    );
+  });
+});
+
+app.get("/api/get-user-name", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  console.log(token);
+  if (!token) {
+    return res.status(403).send("Access denied. No token provided.");
+  }
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Invalid or expired token.");
+    }
+
+    const user_id = decoded.user_id;
+
+    db.query(
+      "SELECT username FROM users WHERE user_id = ?",
       [user_id],
       (err, results) => {
         console.log(results);
