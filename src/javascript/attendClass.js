@@ -1,5 +1,6 @@
 import { fetchStats } from "./index";
 import { showNotification } from "./notificationQueue.js";
+import { updateUserStats } from "./stat-gain.js";
 
 export function attendClass() {
     const token = localStorage.getItem("jwtToken");
@@ -25,6 +26,14 @@ export function attendClass() {
         if (response.ok) {
           const data = await response.json();
           fetchStats();
+          updateUserStats({
+            patterns: 1,
+            technique: 1,
+            strength: 1,
+            agility: 1,
+            flexibility: 1,
+            combat: 1,
+          });
           showNotification("Congratulations, You have attended class today!", { patterns: 1, technique: 1, strength: 1, agility: 1, flexibility: 1, combat: 1 });
 
         } else {

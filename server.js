@@ -215,7 +215,7 @@ app.post("/api/signup-stats", async (req, res) => {
 });
 
 app.get("/api/getStats", (req, res) => {
-  console.log("trying to get STATS")
+  console.log("trying to get STATS");
   const token = req.headers["authorization"]?.split(" ")[1];
   console.log(token);
   if (!token) {
@@ -247,6 +247,87 @@ app.get("/api/getStats", (req, res) => {
     );
   });
 });
+
+app.post("/api/updateStats", (req, res) => {
+  console.log("Updating stats");
+  const token = req.headers["authorization"]?.split(" ")[1];
+  if (!token) {
+    return res.status(403).send("Access denied. No token provided.");
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Invalid or expired token.");
+    }
+
+    const user_id = decoded.user_id;
+    const newStats = req.body;
+    console.log(newStats);
+
+    db.query(
+      "SELECT patterns, technique, strength, agility, flexibility, combat, level, current_xp, xp_to_next_level FROM stats WHERE user_id = ?",
+      [user_id],
+      (err, results) => {
+        if (err) {
+          console.error("Database error:", err);
+          return res.status(500).send("Database error.");
+        }
+
+        if (results.length === 0) {
+          return res.status(404).send("No stats found for this user.");
+        }
+
+        let userStats = results[0];
+        console.log(userStats);
+
+        userStats.patterns = newStats.patterns ?? userStats.patterns;
+        userStats.technique = newStats.technique ?? userStats.technique;
+        userStats.strength = newStats.strength ?? userStats.strength;
+        userStats.agility = newStats.agility ?? userStats.agility;
+        userStats.flexibility = newStats.flexibility ?? userStats.flexibility;
+        userStats.combat = newStats.combat ?? userStats.combat;
+        userStats.level = newStats.level ?? userStats.level;
+        userStats.current_xp = newStats.current_xp ?? userStats.current_xp;
+        userStats.xp_to_next_level = newStats.xp_to_next_level ?? userStats.xp_to_next_level;
+        console.log(userStats);
+
+        const query = `
+          UPDATE stats 
+          SET 
+            patterns = ?, 
+            technique = ?, 
+            strength = ?, 
+            agility = ?, 
+            flexibility = ?, 
+            combat = ?, 
+            level = ?, 
+            current_xp = ?, 
+            xp_to_next_level = ? 
+          WHERE user_id = ?`;
+
+        db.execute(query, [
+          userStats.patterns,
+          userStats.technique,
+          userStats.strength,
+          userStats.agility,
+          userStats.flexibility,
+          userStats.combat,
+          userStats.level,
+          userStats.current_xp,
+          userStats.xp_to_next_level,
+          user_id
+        ], (err, results) => {
+          if (err) {
+            console.error("Error updating user stats:", err);
+            return res.status(500).send("Error updating user stats.");
+          }
+          res.json({ message: "Stats updated successfully", userStats });
+        });
+      }
+    );
+  });
+});
+
 
 app.get("/api/random-quests", (req, res) => {
   console.log("Grabbing 3 random quests");

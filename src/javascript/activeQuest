@@ -3,7 +3,7 @@ import { getQuestSize } from "./leveling";
 import { getQuestColor } from "./leveling";
 
 export async function newActiveQuest() {
-    const token = localStorage.getItem("jwtToken"); // Retrieve JWT from localStorage
+    const token = localStorage.getItem("jwtToken");
 
     if (!token) {
         window.location.href = "/login.html";
@@ -14,7 +14,7 @@ export async function newActiveQuest() {
         const response = await fetch("http://localhost:3000/api/get-active-quest", {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${token}`, // Send JWT in the Authorization header
+                "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json"
             }
         });
@@ -23,10 +23,10 @@ export async function newActiveQuest() {
 
         if (response.ok) {
             if (data.message) {
-                console.log(data.message); // "No active quest found."
+                console.log(data.message);
             } else {
                 console.log("Active Quest:", data);
-                createActiveQuestWindow(data); // Make sure this is being called
+                createActiveQuestWindow(data);
             }
         } else {
             console.error("Error fetching active quest:", data.message);
