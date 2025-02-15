@@ -1,4 +1,5 @@
 import { fetchStats } from "./index";
+import { createLevelUpPopup } from "./notificationQueue";
 
 export async function updateUserStats(statChanges, xpPerStat = 50) {
   console.log("statChanges");
@@ -25,6 +26,7 @@ export async function updateUserStats(statChanges, xpPerStat = 50) {
     }
 
     const currentStats = await response.json();
+    const preLevel = currentStats.level;
 
     const updatedStats = {
       patterns: currentStats.patterns + (statChanges.patterns || 0),
@@ -53,6 +55,9 @@ export async function updateUserStats(statChanges, xpPerStat = 50) {
       body: JSON.stringify(updatedStats),
     });
     if (updateResponse.ok){
+      if (updatedStats.level != preLevel){
+        createLevelUpPopup(updatedStats.level, updatedStats);
+      };
       fetchStats();
     }
     if (!updateResponse.ok) {

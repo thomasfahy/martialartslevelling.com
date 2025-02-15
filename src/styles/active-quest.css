@@ -20,19 +20,14 @@
   font-size: 24px;
   margin-bottom: 20px;
   text-shadow: 0 0 10px rgba(0, 168, 255, 0.7); 
-}
-
-.active-quest-window-title {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #00aaff;
-  text-align: center;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .active-quest-title-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   background: rgba(255, 255, 255, 0.1);
   padding: 10px;
@@ -46,9 +41,10 @@
 }
 
 .active-quest-title {
-  font-size: 1.3em;
+  font-size: 1.6em;
   font-weight: bold;
-  text-align: center;
+  color: white;
+  text-shadow: 0 0 10px rgba(0, 168, 255, 0.7)
 }
 
 .active-quest-step-container {
@@ -56,18 +52,6 @@
   padding: 10px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 5px;
-}
-
-.quest-step {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.quest-step-checkbox {
-  margin-right: 10px;
-  transform: scale(1.2);
-  cursor: pointer;
 }
 
 .quest-step-label {
@@ -127,3 +111,78 @@
 .active-quest-abandon-button:hover, .active-quest-complete-button:hover {
   transform: scale(1.05);
 }
+
+.quest-step-checkbox {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid #00a8ff;
+  background: #1a1a2e;
+  position: relative;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.active-quest-step {
+  display: flex;
+  align-self: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.quest-step-checkbox {
+  appearance: none;
+  scale: 1.2;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid #00a8ff;
+  background: #1a1a2e;
+  position: relative;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.quest-step-checkbox:checked {
+  background: linear-gradient(145deg, #00a8ff, #0077b6);
+  box-shadow: 0 0 10px rgba(0, 168, 255, 0.7);
+}
+
+.quest-step-checkbox:checked::after {
+  content: '✔';
+  position: absolute;
+  top: 0;
+  left: 2px;
+  font-size: 18px;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.quest-step-label {
+  font-size: 16px;
+  color: #e0e0e0;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.quest-step-label .progress {
+  color: #00a8ff;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.quest-step-checkbox:hover {
+  box-shadow: 0 0 15px rgba(0, 168, 255, 0.7);
+}
+
+.quest-step-checkbox:focus {
+  outline: none;
+  border-color: #00a8ff;
+  box-shadow: 0 0 10px rgba(0, 168, 255, 0.7);
+}
+

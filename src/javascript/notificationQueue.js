@@ -27,7 +27,10 @@ export function createStatsPopup(message, stats) {
         Object.entries(stats).forEach(([stat, value]) => {
             if (value > 0) {
                 const statElement = document.createElement("p");
-                statElement.innerHTML = `${stat.charAt(0).toUpperCase() + stat.slice(1)} <span style='color: green;'>+${value}</span>`;
+                
+                const statClass = `stat-name ${stat}`;
+                
+                statElement.innerHTML = `<span class="${statClass}">${stat.charAt(0).toUpperCase() + stat.slice(1)}</span> <span>+${value}</span>`;
                 statsContainer.appendChild(statElement);
             }
         });
@@ -42,7 +45,7 @@ export function createStatsPopup(message, stats) {
 
     confirmButton.addEventListener("click", () => {
         document.body.removeChild(popupContainer);
-        displayNextNotification(); // trigger the next notification after closing this one
+        displayNextNotification();
     });
 
     popupFooter.appendChild(confirmButton);
@@ -53,12 +56,81 @@ export function createStatsPopup(message, stats) {
 
     popupContainer.appendChild(popup);
 
-    notificationQueue.push(popupContainer); // Add to the notification queue
-
+    notificationQueue.push(popupContainer);
     if (!isNotificationVisible) {
-        displayNextNotification(); // Show the first notification if not already visible
+        displayNextNotification();
     }
 }
+
+
+export function createLevelUpPopup(playerLevel, stats) {
+    const popupContainer = document.createElement("div");
+    popupContainer.classList.add("popup-container");
+
+    const popup = document.createElement("div");
+    popup.classList.add("popup");
+
+    const popupHeader = document.createElement("div");
+    popupHeader.classList.add("popup-header");
+    const headerTitle = document.createElement("h2");
+    headerTitle.textContent = "Level Up!";
+    popupHeader.appendChild(headerTitle);
+
+    const popupBody = document.createElement("div");
+    popupBody.classList.add("popup-body");
+
+    const messageParagraph = document.createElement("p");
+    messageParagraph.innerHTML = `Congratulations! You have reached <strong style="color: #00a8ff;">Level ${playerLevel}</strong>!`;
+    popupBody.appendChild(messageParagraph);
+
+    if (stats && Object.keys(stats).length > 0) {
+        const statsContainer = document.createElement("div");
+        statsContainer.classList.add("notification-stats-container");
+
+        // Limit to the first 6 stats
+        const statsEntries = Object.entries(stats).slice(0, 6);
+
+        statsEntries.forEach(([stat, value]) => {
+            if (value > 0) {
+                const statElement = document.createElement("p");
+                const statClass = `stat-name ${stat}`;
+
+                // Display stat with value in bold white
+                statElement.innerHTML = `<span class="${statClass}">${stat.charAt(0).toUpperCase() + stat.slice(1)}:</span> <span style="color: white; font-weight: bold;">${value}</span>`;
+                statsContainer.appendChild(statElement);
+            }
+        });
+        popupBody.appendChild(statsContainer);
+    }
+
+    const popupFooter = document.createElement("div");
+    popupFooter.classList.add("popup-footer");
+    const confirmButton = document.createElement("button");
+    confirmButton.classList.add("confirm-btn");
+    confirmButton.textContent = "Confirm";
+
+    confirmButton.addEventListener("click", () => {
+        document.body.removeChild(popupContainer);
+        displayNextNotification();
+    });
+
+    popupFooter.appendChild(confirmButton);
+
+    popup.appendChild(popupHeader);
+    popup.appendChild(popupBody);
+    popup.appendChild(popupFooter);
+
+    popupContainer.appendChild(popup);
+
+    notificationQueue.push(popupContainer);
+    if (!isNotificationVisible) {
+        displayNextNotification();
+    }
+}
+
+
+
+
 
 function displayNextNotification() {
     if (notificationQueue.length === 0) {
@@ -68,20 +140,9 @@ function displayNextNotification() {
 
     isNotificationVisible = true;
 
-    const popupElement = notificationQueue.shift(); // Get the next notification in the queue
+    const popupElement = notificationQueue.shift();
     
-    document.body.appendChild(popupElement); // Append it to the DOM
+    document.body.appendChild(popupElement);
 }
 
-// Call createStatsPopup to add a notification to the queue
-createStatsPopup(
-    "You attended class and gained the following stats:",
-    {
-        strength: 1,
-        agility: 1,
-        flexibility: 1,
-        combat: 1,
-        technique: 1,
-        patterns: 1
-    }
-);
+

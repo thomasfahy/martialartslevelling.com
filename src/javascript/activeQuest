@@ -96,7 +96,6 @@ function appendStatGains(questData, questContainer) {
 
 function createActiveQuestWindow(questData) {
 
-    
     const leftContainer = document.querySelector(".left-container");
 
     const activeQuestContainer = document.createElement("div");
@@ -113,16 +112,9 @@ function createActiveQuestWindow(questData) {
     activeQuestTitleContainer.classList.add("active-quest-title-container");
     activeQuestContainer.appendChild(activeQuestTitleContainer);
 
-    const activeQuestSize = document.createElement("div");
-    activeQuestSize.classList.add("active-quest-size");
-    activeQuestSize.textContent = getQuestSize(questData.quest_size);
-    activeQuestSize.style.color = getQuestColor(questData.quest_size);
-    activeQuestTitleContainer.appendChild(activeQuestSize);
-
     const activeQuestTitle = document.createElement("div");
     activeQuestTitle.classList.add("active-quest-title");
     activeQuestTitle.textContent = questData.quest_title;
-    activeQuestTitle.style.color = getQuestColor(questData.quest_size);
     activeQuestTitleContainer.appendChild(activeQuestTitle);
 
     const questStepsContainer = document.createElement("div");
@@ -158,8 +150,4 @@ function createActiveQuestWindow(questData) {
     appendStatGains(questData, activeQuestContainer);
 
     activeQuestContainer.appendChild(activeQuestButtonContainer);
-
-
-
-
 }
