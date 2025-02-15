@@ -54,6 +54,12 @@
     transition: background 0.3s ease;
   }
   
+  .notification-stats-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+
   .confirm-btn:hover {
     background: linear-gradient(145deg, #0077b6, #00a8ff);
     box-shadow: 0 0 10px rgba(0, 168, 255, 0.7);

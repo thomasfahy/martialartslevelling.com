@@ -329,6 +329,7 @@ app.post("/api/updateStats", (req, res) => {
 });
 
 
+
 app.get("/api/random-quests", (req, res) => {
   console.log("Grabbing 3 random quests");
   const query = "SELECT * FROM quests ORDER BY RAND() LIMIT 3";
@@ -338,43 +339,6 @@ app.get("/api/random-quests", (req, res) => {
           return res.status(500).json({ error: "Database query failed" });
       }
       res.json(results);
-  });
-});
-
-app.post('/api/attendClass', (req, res) => {
-  const token = req.headers["authorization"]?.split(" ")[1];
-  console.log(token);
-  if (!token) {
-    return res.status(403).send("Access denied. No token provided.");
-  }
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).send("Invalid or expired token.");
-    }
-
-    const updateStatsQuery = `
-      UPDATE stats
-      SET patterns = patterns + 1,
-          technique = technique + 1,
-          strength = strength + 1,
-          agility = agility + 1,
-          flexibility = flexibility + 1,
-          combat = combat + 1
-      WHERE user_id = ?`;
-
-    const user_id = decoded.user_id;  
-
-    db.query(updateStatsQuery, [user_id], (err, results) => {
-      if (err) {
-        console.error('Error updating stats:', err);
-        return res.status(500).send('Failed to update stats.');
-      }
-
-      if (results.affectedRows === 0) {
-        return res.status(404).send("No stats found for this user.");
-      }
-      res.json({ message: 'Stats incremented by +1 for your profile' });
-    });
   });
 });
 

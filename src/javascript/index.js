@@ -2,7 +2,7 @@ import "../styles/styles.css";
 import "../styles/notificationPopup.css";
 import "../styles/leveling.css"
 import { levelUp } from "./leveling.js";
-import { showNotification } from "./notificationQueue.js";
+import { createStatsPopup } from "./notificationQueue.js";
 import { attendClass } from "./attendClass.js";
 
 
@@ -96,7 +96,6 @@ export async function fetchRandomQuests() {
 }
 
 fetchRandomQuests();
-
 
 
 

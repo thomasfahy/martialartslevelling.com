@@ -1,5 +1,5 @@
 import { fetchStats } from "./index";
-import { showNotification } from "./notificationQueue.js";
+import { createStatsPopup } from "./notificationQueue.js";
 import { updateUserStats } from "./stat-gain.js";
 
 export function attendClass() {
@@ -14,35 +14,25 @@ export function attendClass() {
       return;
     }
     attendButton.addEventListener("click", async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/attendClass', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({ increment: 1 }),
-        });
-        if (response.ok) {
-          const data = await response.json();
-          fetchStats();
-          updateUserStats({
-            patterns: 1,
-            technique: 1,
+      updateUserStats({
+        patterns: 1,
+        technique: 1,
+        strength: 1,
+        agility: 1,
+        flexibility: 1,
+        combat: 1,
+      });
+      createStatsPopup(
+        "You attended class and gained the following stats:",
+        {
             strength: 1,
             agility: 1,
             flexibility: 1,
             combat: 1,
-          });
-          showNotification("Congratulations, You have attended class today!", { patterns: 1, technique: 1, strength: 1, agility: 1, flexibility: 1, combat: 1 });
-
-        } else {
-          console.error("Failed to increment stats.");
+            technique: 1,
+            patterns: 1
         }
-      } catch (error) {
-        console.error("Error making API call:", error);
-      }
+      );
     });
   }
 
-  
