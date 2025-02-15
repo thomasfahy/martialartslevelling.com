@@ -20,6 +20,16 @@ export function createStatsPopup(message, stats) {
     messageParagraph.textContent = message;
     popupBody.appendChild(messageParagraph);
 
+    // Calculate total XP gained
+    const totalXP = Object.values(stats).reduce((sum, value) => sum + value, 0) * 50;
+
+    if (totalXP > 0) {
+        const xpElement = document.createElement("p");
+        xpElement.classList.add("xp-gain");
+        xpElement.innerHTML = `<strong>XP Gained:</strong> +${totalXP}`;
+        popupBody.appendChild(xpElement);
+    }
+
     if (stats && Object.keys(stats).length > 0) {
         const statsContainer = document.createElement("div");
         statsContainer.classList.add("notification-stats-container");
@@ -27,7 +37,6 @@ export function createStatsPopup(message, stats) {
         Object.entries(stats).forEach(([stat, value]) => {
             if (value > 0) {
                 const statElement = document.createElement("p");
-                
                 const statClass = `stat-name ${stat}`;
                 
                 statElement.innerHTML = `<span class="${statClass}">${stat.charAt(0).toUpperCase() + stat.slice(1)}</span> <span>+${value}</span>`;
@@ -63,6 +72,7 @@ export function createStatsPopup(message, stats) {
 }
 
 
+
 export function createLevelUpPopup(playerLevel, stats) {
     const popupContainer = document.createElement("div");
     popupContainer.classList.add("popup-container");
@@ -82,26 +92,6 @@ export function createLevelUpPopup(playerLevel, stats) {
     const messageParagraph = document.createElement("p");
     messageParagraph.innerHTML = `Congratulations! You have reached <strong style="color: #00a8ff;">Level ${playerLevel}</strong>!`;
     popupBody.appendChild(messageParagraph);
-
-    if (stats && Object.keys(stats).length > 0) {
-        const statsContainer = document.createElement("div");
-        statsContainer.classList.add("notification-stats-container");
-
-        // Limit to the first 6 stats
-        const statsEntries = Object.entries(stats).slice(0, 6);
-
-        statsEntries.forEach(([stat, value]) => {
-            if (value > 0) {
-                const statElement = document.createElement("p");
-                const statClass = `stat-name ${stat}`;
-
-                // Display stat with value in bold white
-                statElement.innerHTML = `<span class="${statClass}">${stat.charAt(0).toUpperCase() + stat.slice(1)}:</span> <span style="color: white; font-weight: bold;">${value}</span>`;
-                statsContainer.appendChild(statElement);
-            }
-        });
-        popupBody.appendChild(statsContainer);
-    }
 
     const popupFooter = document.createElement("div");
     popupFooter.classList.add("popup-footer");

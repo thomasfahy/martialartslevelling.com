@@ -43,7 +43,7 @@ export async function updateUserStats(statChanges, xpPerStat = 50) {
     if (updatedStats.current_xp >= updatedStats.xp_to_next_level) {
       updatedStats.level += 1;
       updatedStats.current_xp -= updatedStats.xp_to_next_level;
-      updatedStats.xp_to_next_level = updatedStats.xp_to_next_level * 1.2;
+      updatedStats.xp_to_next_level = updatedStats.xp_to_next_level + 40;
     }
 
     const updateResponse = await fetch("http://localhost:3000/api/updateStats", {

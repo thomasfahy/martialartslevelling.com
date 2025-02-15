@@ -130,7 +130,6 @@ export async function levelUp() {
         
                     const data = await response.json();
                     if (data.success) {
-                        alert("Quest accepted!");
                         document.body.removeChild(overlay);
                         console.log(data);
                         newActiveQuest();

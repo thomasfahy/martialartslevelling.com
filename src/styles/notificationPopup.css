@@ -32,7 +32,6 @@
   
   .popup-body{
     display: grid;
-    grid-template-rows: 50px 250px;
     font-size: 18px;
     color: #e0e0e0;
     margin: 20px 0;
@@ -55,10 +54,8 @@
   }
   
   .notification-stats-container{
-    margin-top: 50px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
 
   }
 

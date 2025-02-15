@@ -1,6 +1,6 @@
 import "../styles/active-quest.css";
-import { getQuestSize } from "./leveling";
-import { getQuestColor } from "./leveling";
+import { updateUserStats } from "./stat-gain";
+import { createStatsPopup } from "./notificationQueue";
 
 export async function newActiveQuest() {
     const token = localStorage.getItem("jwtToken");
@@ -137,6 +137,10 @@ function createActiveQuestWindow(questData) {
     questCompleteButton.textContent = "Complete";
     questCompleteButton.style.backgroundColor = "#00aaff";
 
+    questCompleteButton.addEventListener("click", () => {
+        createConfirmationPopup(completeActiveQuest, activeQuestContainer, questData);
+    });
+
     const questAbandonButton = document.createElement("button");
     questAbandonButton.classList.add("active-quest-abandon-button");
     questAbandonButton.textContent = "Abandon";
@@ -151,3 +155,68 @@ function createActiveQuestWindow(questData) {
 
     activeQuestContainer.appendChild(activeQuestButtonContainer);
 }
+
+
+export function createConfirmationPopup(onConfirm, activeQuestContainer,questData) {
+    const popupOverlay = document.createElement("div");
+    popupOverlay.classList.add("confirmation-popup-overlay");
+
+    const popupContainer = document.createElement("div");
+    popupContainer.classList.add("confirmation-popup-container");
+
+    const popupTitle = document.createElement("h2");
+    popupTitle.textContent = "System Message";
+
+    const popupMessage = document.createElement("p");
+    popupMessage.textContent = "Please confirm if you have successfully completed each step required to finish the quest.";
+
+    const yesButton = document.createElement("button");
+    yesButton.textContent = "Yes";
+    yesButton.classList.add("confirmation-popup-button", "confirmation-popup-yes");
+
+    const noButton = document.createElement("button");
+    noButton.textContent = "No";
+    noButton.classList.add("confirmation-popup-button", "confirmation-popup-no");
+
+    const confirmationButtonContainer = document.createElement("div");
+    confirmationButtonContainer.classList.add("confirmation-button-container");
+    confirmationButtonContainer.appendChild(yesButton);
+    confirmationButtonContainer.appendChild(noButton);
+
+    yesButton.addEventListener("click", () => {
+        onConfirm(questData);
+        popupOverlay.remove();
+        activeQuestContainer.remove();
+    });
+
+    noButton.addEventListener("click", () => {
+        popupOverlay.remove();
+    });
+
+    popupContainer.appendChild(popupTitle);
+    popupContainer.appendChild(popupMessage);
+    popupContainer.appendChild(confirmationButtonContainer);
+    popupOverlay.appendChild(popupContainer);
+    document.body.appendChild(popupOverlay);
+}
+
+export async function completeActiveQuest(questData) {
+    const statsGain = {
+        strength: questData.strength_gain,
+        agility: questData.agility_gain,
+        flexibility: questData.flexibility_gain,
+        combat: questData.combat_gain,
+        technique: questData.technique_gain,
+        patterns: questData.patterns_gain
+    };
+    console.log(statsGain);
+    updateUserStats(statsGain);
+    createStatsPopup(
+        "Completing the quest: " + questData.quest_title + ".  Has earned the following Stats:",
+        statsGain
+    );
+
+}
+
+
+
