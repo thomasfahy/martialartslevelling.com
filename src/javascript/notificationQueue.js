@@ -1,6 +1,112 @@
 const notificationQueue = [];
 let isNotificationVisible = false;
 
+export function createActiveQuestPopup() {
+    const popupContainer = document.createElement("div");
+    popupContainer.classList.add("popup-container");
+
+    const popup = document.createElement("div");
+    popup.classList.add("popup");
+
+    const popupHeader = document.createElement("div");
+    popupHeader.classList.add("popup-header");
+    const headerTitle = document.createElement("h2");
+    headerTitle.textContent = "Active Quest Alert";
+    popupHeader.appendChild(headerTitle);
+
+    const popupBody = document.createElement("div");
+    popupBody.classList.add("popup-body");
+    const messageParagraph = document.createElement("p");
+    messageParagraph.textContent = "There is currently an active quest running. Please complete or discard the current active quest before starting a new one.";
+    popupBody.appendChild(messageParagraph);
+
+    const popupFooter = document.createElement("div");
+    popupFooter.classList.add("popup-footer");
+    const confirmButton = document.createElement("button");
+    confirmButton.classList.add("confirm-btn");
+    confirmButton.textContent = "OK";
+
+    confirmButton.addEventListener("click", () => {
+        document.body.removeChild(popupContainer);
+        displayNextNotification();
+    });
+
+    popupFooter.appendChild(confirmButton);
+
+    popup.appendChild(popupHeader);
+    popup.appendChild(popupBody);
+    popup.appendChild(popupFooter);
+    popupContainer.appendChild(popup);
+
+    notificationQueue.push(popupContainer);
+
+    if (!isNotificationVisible) {
+        displayNextNotification();
+    }
+}
+
+export function createAbandonQuestPopup() {
+    const popupContainer = document.createElement("div");
+    popupContainer.classList.add("popup-container");
+
+    const popup = document.createElement("div");
+    popup.classList.add("popup");
+
+    const popupHeader = document.createElement("div");
+    popupHeader.classList.add("popup-header");
+    const headerTitle = document.createElement("h2");
+    headerTitle.textContent = "Abandon Quest?";
+    popupHeader.appendChild(headerTitle);
+
+    const popupBody = document.createElement("div");
+    popupBody.classList.add("popup-body");
+    const messageParagraph = document.createElement("p");
+    messageParagraph.textContent = "Are you sure you want to abandon your current quest? This action cannot be undone.";
+    popupBody.appendChild(messageParagraph);
+
+    const popupFooter = document.createElement("div");
+    popupFooter.classList.add("popup-footer");
+
+    const confirmButton = document.createElement("button");
+    confirmButton.classList.add("confirm-btn");
+    confirmButton.textContent = "Confirm";
+
+    confirmButton.addEventListener("click", () => {
+        const activeQuestContainer = document.querySelector(".active-quest-container");
+        if (activeQuestContainer) {
+            activeQuestContainer.remove();
+            console.log("Active quest container removed.");
+        }
+        document.body.removeChild(popupContainer);
+        displayNextNotification();
+    });
+
+    const cancelButton = document.createElement("button");
+    cancelButton.classList.add("cancel-btn");
+    cancelButton.textContent = "Cancel";
+
+    cancelButton.addEventListener("click", () => {
+        document.body.removeChild(popupContainer);
+        displayNextNotification();
+    });
+
+    popupFooter.appendChild(cancelButton);
+    popupFooter.appendChild(confirmButton);
+
+    popup.appendChild(popupHeader);
+    popup.appendChild(popupBody);
+    popup.appendChild(popupFooter);
+    popupContainer.appendChild(popup);
+
+    notificationQueue.push(popupContainer);
+
+    if (!isNotificationVisible) {
+        displayNextNotification();
+    }
+}
+
+
+
 export function createStatsPopup(message, stats) {
     const popupContainer = document.createElement("div");
     popupContainer.classList.add("popup-container");
@@ -20,7 +126,6 @@ export function createStatsPopup(message, stats) {
     messageParagraph.textContent = message;
     popupBody.appendChild(messageParagraph);
 
-    // Calculate total XP gained
     const totalXP = Object.values(stats).reduce((sum, value) => sum + value, 0) * 50;
 
     if (totalXP > 0) {
@@ -114,9 +219,6 @@ export function createSystemGuidancePopup(youtubeUrl, guidanceText) {
     document.body.appendChild(popupOverlay);
 }
 
-
-
-
 export function createLevelUpPopup(playerLevel, stats) {
     const popupContainer = document.createElement("div");
     popupContainer.classList.add("popup-container");
@@ -161,9 +263,6 @@ export function createLevelUpPopup(playerLevel, stats) {
         displayNextNotification();
     }
 }
-
-
-
 
 
 function displayNextNotification() {

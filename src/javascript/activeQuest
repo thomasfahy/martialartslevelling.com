@@ -2,6 +2,7 @@ import "../styles/active-quest.css";
 import { updateUserStats } from "./stat-gain";
 import { createStatsPopup } from "./notificationQueue";
 import { createSystemGuidancePopup } from "./notificationQueue";
+import { createAbandonQuestPopup } from "./notificationQueue";
 
 export async function newActiveQuest() {
     const token = localStorage.getItem("jwtToken");
@@ -158,6 +159,10 @@ function createActiveQuestWindow(questData) {
     questAbandonButton.classList.add("active-quest-abandon-button");
     questAbandonButton.textContent = "Abandon";
     questAbandonButton.style.backgroundColor = "#c0392b";
+
+    questAbandonButton.addEventListener("click", () => {
+        createAbandonQuestPopup();
+    });
 
     const activeQuestButtonContainer = document.createElement("div");
     activeQuestButtonContainer.classList.add("active-quest-button-container");

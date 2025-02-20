@@ -1,10 +1,17 @@
 import { newActiveQuest } from "./activeQuest";
+import { createActiveQuestPopup } from "./notificationQueue";
 
 export async function levelUp() {
     const levelUpButton = document.getElementById("level-up");
 
     levelUpButton.addEventListener("click", async () => {
         const quests = await fetchRandomQuests();
+
+        const activeQuestContainerCheck = document.querySelector(".active-quest-container");
+        if (activeQuestContainerCheck){
+            createActiveQuestPopup();
+            return;
+        };
         
         const overlay = document.createElement("div");
         overlay.id = "quest-overlay";

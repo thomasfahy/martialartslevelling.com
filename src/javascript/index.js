@@ -7,18 +7,34 @@ import { attendClass } from "./attendClass.js";
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.addEventListener("DOMContentLoaded", () => {
-        const token = localStorage.getItem("jwtToken");
-        console.log("Token being sent:", token);
-        if (!token) {
+  const token = localStorage.getItem("jwtToken");
+  console.log("Token being sent:", token);
+
+  if (!token) {
+      window.location.href = "/login.html";
+      return;
+  }
+  try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const currentTime = Math.floor(Date.now() / 1000);
+
+      if (payload.exp < currentTime) {
+          console.warn("Token expired! Redirecting...");
+          localStorage.removeItem("jwtToken");
           window.location.href = "/login.html";
           return;
-        }
-      });
+      }
+  } catch (e) {
+      console.error("Invalid token:", e);
+      localStorage.removeItem("jwtToken");
+      window.location.href = "/login.html";
+      return;
+  }
   levelUp();
-  attendClass();    
+  attendClass();
   fetchStats();
 });
+
 
 export function fetchStats() {
   const token = localStorage.getItem("jwtToken");
