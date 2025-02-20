@@ -1,10 +1,6 @@
 body {
   font-family: Arial, sans-serif;
   background-color: #0a0a1a;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
   margin: 0;
   color: #e0e0e0;
@@ -20,6 +16,17 @@ body {
 .center-container{
   display: flex;
   align-items: center;
+}
+
+.player-title-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-items: space-between;
+}
+
+.player-title{
+  justify-self: end;
 }
 
 .left-container{

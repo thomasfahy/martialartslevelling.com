@@ -5,7 +5,6 @@ import { levelUp } from "./leveling.js";
 import { createStatsPopup } from "./notificationQueue.js";
 import { attendClass } from "./attendClass.js";
 
-
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("jwtToken");
   console.log("Token being sent:", token);
